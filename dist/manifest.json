@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "TS React Test extension",
+  "version": "1.0",
+  "description": "Testin ts and react extension",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "TS React",
+    "default_action": "icon.png"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "options_page": "options.html"
+}
