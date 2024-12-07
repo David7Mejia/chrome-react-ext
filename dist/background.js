@@ -1,0 +1,1 @@
+(()=>{"use strict";chrome.runtime.onMessage.addListener(((e,s,o)=>{console.log("this is the message from content script",e),console.log("this is the sender from content script",s),o("Hello from background")}))})();

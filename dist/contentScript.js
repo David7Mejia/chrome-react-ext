@@ -1,0 +1,1 @@
+(()=>{"use strict";chrome.runtime.sendMessage("Hello from content script",(e=>{console.log("this is the response from content script",e)}))})();
