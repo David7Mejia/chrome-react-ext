@@ -1,29 +1,33 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
-const { optimize } = require("webpack");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
 module.exports = {
-  // mode: "development",
+  mode: "development",
   // devtool: "cheap-module-source-map",
   entry: {
-    popup: path.resolve("src/popup/popup.tsx"),
-    options: path.resolve("src/options/options.tsx"),
-    background: path.resolve("src/background/background.ts"),
-    contentScript: path.resolve("src/contentScript/contentScript.ts"),
+    popup: path.resolve(__dirname, "src/popup/popup.jsx"),
+    options: path.resolve(__dirname, "src/options/options.jsx"),
+    background: path.resolve(__dirname, "src/background/background.js"),
+    contentScript: path.resolve(__dirname, "src/contentScript/contentScript.js"),
   },
+
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: "ts-loader",
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
+        use: "babel-loader",
       },
       {
-        use: ["style-loader", "css-loader"],
         test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
       },
-      { type: "asset/resource", test: /\.(png|svg|jpg|jpeg|gif|woff|woff2)$/ },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif|woff|woff2)$/,
+        type: "asset/resource",
+      },
     ],
   },
   plugins: [
@@ -36,21 +40,17 @@ module.exports = {
           from: path.resolve("src/static"),
           to: path.resolve("dist"),
         },
+        { from: "src/static/icon.png", to: "." },
       ],
     }),
     ...getHtmlPlugins(["popup", "options"]),
   ],
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".js", ".jsx"],
   },
   output: {
     filename: "[name].js",
     path: path.resolve("dist"),
-  },
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-    },
   },
 };
 
@@ -58,7 +58,7 @@ function getHtmlPlugins(chunks) {
   return chunks.map(
     chunk =>
       new HtmlPlugin({
-        title: "TS React",
+        title: "wp ext",
         filename: `${chunk}.html`,
         chunks: [chunk],
       })

@@ -1,0 +1,31 @@
+.bubble-boy {
+  background-color: rgb(10, 16, 10) !important;
+  display: flex;
+  flex-direction: row;
+  border-radius: 50px 0 0 50px;
+  position: fixed;
+  right: 0;
+  width: 50px;
+  height: 35px;
+  z-index: 300000000;
+  margin: 0;
+  padding: 0;
+  bottom: 69px;
+  -webkit-box-shadow: -6px -9px 88px -25px rgba(0, 0, 0, 0.26);
+  -moz-box-shadow: -6px -9px 88px -25px rgba(0, 0, 0, 0.26);
+  box-shadow: 0 3.2px 12px 0 rgba(0, 0, 0, 0.24), 0 5px 25px 0 rgba(0, 0, 0, 0.24);
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: ease-in-out 0.3s;
+}
+
+.bubble-boy:hover {
+  background-color: rgb(10, 16, 10) !important;
+  width: 70px;
+}
+
+.nodes-svg {
+  width: 30px;
+  height: 30px;
+}

@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "TS React Test extension",
+  "name": "wp ext",
   "version": "1.0",
   "description": "Testin ts and react extension",
   "action": {
@@ -17,6 +17,13 @@
   "background": {
     "service_worker": "background.js"
   },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["icon.png", "nodes.svg", "f5b5c50e1991f79f8733.svg", "6bcffb56bd0efaa47767.png"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

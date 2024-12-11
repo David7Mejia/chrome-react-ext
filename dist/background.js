@@ -1,1 +1,12 @@
-(()=>{"use strict";chrome.runtime.onMessage.addListener(((e,s,o)=>{console.log("this is the message from content script",e),console.log("this is the sender from content script",s),o("Hello from background")}))})();
+/******/ (() => { // webpackBootstrap
+/*!**************************************!*\
+  !*** ./src/background/background.js ***!
+  \**************************************/
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  console.log("this is the message from content script", message);
+  console.log("this is the sender from content script", sender);
+  sendResponse("Hello from background");
+});
+/******/ })()
+;
+//# sourceMappingURL=background.js.map
