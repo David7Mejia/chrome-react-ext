@@ -1,11 +1,11 @@
 .bubble-boy {
-  background-color: rgb(10, 16, 10) !important;
+  background-color: rgb(224, 226, 224) !important;
   display: flex;
   flex-direction: row;
   border-radius: 50px 0 0 50px;
   position: fixed;
   right: 0;
-  width: 50px;
+  width: 30px;
   height: 35px;
   z-index: 300000000;
   margin: 0;
@@ -21,8 +21,8 @@
 }
 
 .bubble-boy:hover {
-  background-color: rgb(10, 16, 10) !important;
-  width: 70px;
+  background-color: rgb(224, 226, 224) !important;
+  width: 50px;
 }
 
 .nodes-svg {

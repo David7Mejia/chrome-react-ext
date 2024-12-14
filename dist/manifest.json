@@ -1,17 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "wp ext",
+  "name": "Promptking",
   "version": "1.0",
   "description": "Testin ts and react extension",
   "action": {
     "default_popup": "popup.html",
-    "default_title": "TS React",
-    "default_action": "icon.png"
+    "default_title": "Promptking",
+    "default_action": "promptking.png"
   },
   "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
+    "16": "promptking.png",
+    "48": "promptking.png",
+    "128": "promptking.png"
   },
   "options_page": "options.html",
   "background": {
@@ -20,14 +20,19 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["icon.png", "nodes.svg", "f5b5c50e1991f79f8733.svg", "6bcffb56bd0efaa47767.png"],
+      "resources": ["icon.png", "promptking.png", "nodes.svg", "f5b5c50e1991f79f8733.svg", "6bcffb56bd0efaa47767.png"],
       "matches": ["<all_urls>"]
     }
   ],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
+      "exclude": ["localhost:*"],
       "js": ["contentScript.js"]
     }
-  ]
+  ],
+  "permissions": ["sidePanel", "activeTab", "scripting", "contextMenus", "alarms"],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
 }

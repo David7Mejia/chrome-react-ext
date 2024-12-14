@@ -1,12 +1,1 @@
-/******/ (() => { // webpackBootstrap
-/*!**************************************!*\
-  !*** ./src/background/background.js ***!
-  \**************************************/
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  console.log("this is the message from content script", message);
-  console.log("this is the sender from content script", sender);
-  sendResponse("Hello from background");
-});
-/******/ })()
-;
-//# sourceMappingURL=background.js.map
+chrome.runtime.onMessage.addListener((function(e,n,t){if("openSidePanel"===e.type){if(n.tab)return chrome.sidePanel.open({windowId:n.tab.windowId}).then((function(){t({status:"Side panel opened"})})).catch((function(e){console.error("Failed to open side panel:",e),t({status:"error",error:e})})),!0;t({status:"no-tab-context"})}}));

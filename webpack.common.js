@@ -8,6 +8,7 @@ module.exports = {
   // devtool: "cheap-module-source-map",
   entry: {
     popup: path.resolve(__dirname, "src/popup/popup.jsx"),
+    sidepanel: path.resolve(__dirname, "src/sidepanel/sidepanel.jsx"),
     options: path.resolve(__dirname, "src/options/options.jsx"),
     background: path.resolve(__dirname, "src/background/background.js"),
     contentScript: path.resolve(__dirname, "src/contentScript/contentScript.js"),
@@ -20,6 +21,7 @@ module.exports = {
         exclude: /node_modules/,
         use: "babel-loader",
       },
+
       {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
@@ -43,7 +45,7 @@ module.exports = {
         { from: "src/static/icon.png", to: "." },
       ],
     }),
-    ...getHtmlPlugins(["popup", "options"]),
+    ...getHtmlPlugins(["popup", "options", "sidepanel"]),
   ],
   resolve: {
     extensions: [".js", ".jsx"],
@@ -58,7 +60,7 @@ function getHtmlPlugins(chunks) {
   return chunks.map(
     chunk =>
       new HtmlPlugin({
-        title: "wp ext",
+        title: "Promptking",
         filename: `${chunk}.html`,
         chunks: [chunk],
       })
