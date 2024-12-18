@@ -1,9 +1,14 @@
+body {
+  box-sizing: border-box;
+  height: calc(100vh - 16px);
+}
+
 .sidepanel-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  padding: 16px;
+  padding: 8px;
   box-sizing: border-box;
 }
 
@@ -38,4 +43,8 @@
   box-sizing: border-box;
   resize: none;
   margin-top: auto; /* Pushes the input to the bottom */
+}
+
+.promptking_root {
+  height: 100%;
 }
