@@ -5,7 +5,6 @@ import store from "../../store";
 
 // import "./popup.css";
 import SidePanel from "../components/SidePanel";
-
 const rootElement = document.createElement("div");
 document.body.appendChild(rootElement);
 // add class or ID to the root element

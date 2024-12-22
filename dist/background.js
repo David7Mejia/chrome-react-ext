@@ -4,6 +4,14 @@
   \**************************************/
 // Listen for messages from content scripts
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  if (message.type === "contenteditableUpdate") {
+    console.log("content editable update received from content script:", message === null || message === void 0 ? void 0 : message.content);
+    sendResponse({
+      status: "Content received",
+      content: message === null || message === void 0 ? void 0 : message.content
+    });
+    return true; // Keep the sendResponse channel open
+  }
   if (message.type === "openSidePanel") {
     if (sender.tab) {
       chrome.sidePanel.open({

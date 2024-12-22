@@ -40,3 +40,13 @@
   background-size: contain;
 }
 
+#pk-enhance-btn {
+  background-color: red;
+}
+
+#pk-enhancer-container {
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  z-index: 10000;
+}

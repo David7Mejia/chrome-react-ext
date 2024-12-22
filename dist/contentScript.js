@@ -63,7 +63,17 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.bubble-boy {
   background-size: contain;
 }
 
-`, "",{"version":3,"sources":["webpack://./src/contentScript/contentScript.css"],"names":[],"mappings":"AAAA;EACE,+CAA+C;EAC/C,aAAa;EACb,mBAAmB;EACnB,4BAA4B;EAC5B,eAAe;EACf,QAAQ;EACR,WAAW;EACX,YAAY;EACZ,kBAAkB;EAClB,SAAS;EACT,UAAU;EACV,aAAa;EACb;;qFAEmF;;EAEnF,mGAAmG;EACnG,mBAAmB;EACnB,2BAA2B;EAC3B,eAAe;EACf,4BAA4B;EAC5B,sBAAsB;EACtB,aAAa;EACb,+BAA+B;AACjC;;AAEA;EACE,2BAA2B;EAC3B,mBAAmB;EACnB,qBAAqB;EACrB,WAAW;AACb;;AAEA;EACE,WAAW;EACX,YAAY;EACZ,2BAA2B;EAC3B,4BAA4B;EAC5B,wBAAwB;AAC1B","sourcesContent":[".bubble-boy {\n  background-color: rgb(255, 255, 255) !important;\n  display: flex;\n  flex-direction: row;\n  border-radius: 50px 0 0 50px;\n  position: fixed;\n  right: 0;\n  width: 40px;\n  height: 40px;\n  z-index: 300000000;\n  margin: 0;\n  padding: 0;\n  bottom: 200px;\n  /* -webkit-box-shadow: -6px -9px 88px -25px rgba(0, 0, 0, 0.26);\n  -moz-box-shadow: -6px -9px 88px -25px rgba(0, 0, 0, 0.26);\n  box-shadow: 0 3.2px 12px 0 rgba(0, 0, 0, 0.24), 0 5px 25px 0 rgba(0, 0, 0, 0.24); */\n\n  box-shadow: 0 0 1px 0 #0c0d190f, 0 6px 24px #0c0d190f, 0 12px 48px #0c0d190f, 0 24px 96px #0c0d190f;\n  align-items: center;\n  justify-content: flex-start;\n  cursor: pointer;\n  transition: ease-in-out 0.3s;\n  box-sizing: border-box;\n  padding: auto;\n  /* border: 1px solid #d8d8d8; */\n}\n\n.bubble-boy:hover {\n  border-width: 1px 0 1px 1px;\n  border-style: solid;\n  border-color: #d8d8d8;\n  width: 46px;\n}\n\n.nodes-svg {\n  width: 30px;\n  height: 30px;\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: contain;\n}\n\n"],"sourceRoot":""}]);
+#pk-enhance-btn {
+  background-color: red;
+}
+
+#pk-enhancer-container {
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  z-index: 10000;
+}
+`, "",{"version":3,"sources":["webpack://./src/contentScript/contentScript.css"],"names":[],"mappings":"AAAA;EACE,+CAA+C;EAC/C,aAAa;EACb,mBAAmB;EACnB,4BAA4B;EAC5B,eAAe;EACf,QAAQ;EACR,WAAW;EACX,YAAY;EACZ,kBAAkB;EAClB,SAAS;EACT,UAAU;EACV,aAAa;EACb;;qFAEmF;;EAEnF,mGAAmG;EACnG,mBAAmB;EACnB,2BAA2B;EAC3B,eAAe;EACf,4BAA4B;EAC5B,sBAAsB;EACtB,aAAa;EACb,+BAA+B;AACjC;;AAEA;EACE,2BAA2B;EAC3B,mBAAmB;EACnB,qBAAqB;EACrB,WAAW;AACb;;AAEA;EACE,WAAW;EACX,YAAY;EACZ,2BAA2B;EAC3B,4BAA4B;EAC5B,wBAAwB;AAC1B;;AAEA;EACE,qBAAqB;AACvB;;AAEA;EACE,eAAe;EACf,YAAY;EACZ,WAAW;EACX,cAAc;AAChB","sourcesContent":[".bubble-boy {\n  background-color: rgb(255, 255, 255) !important;\n  display: flex;\n  flex-direction: row;\n  border-radius: 50px 0 0 50px;\n  position: fixed;\n  right: 0;\n  width: 40px;\n  height: 40px;\n  z-index: 300000000;\n  margin: 0;\n  padding: 0;\n  bottom: 200px;\n  /* -webkit-box-shadow: -6px -9px 88px -25px rgba(0, 0, 0, 0.26);\n  -moz-box-shadow: -6px -9px 88px -25px rgba(0, 0, 0, 0.26);\n  box-shadow: 0 3.2px 12px 0 rgba(0, 0, 0, 0.24), 0 5px 25px 0 rgba(0, 0, 0, 0.24); */\n\n  box-shadow: 0 0 1px 0 #0c0d190f, 0 6px 24px #0c0d190f, 0 12px 48px #0c0d190f, 0 24px 96px #0c0d190f;\n  align-items: center;\n  justify-content: flex-start;\n  cursor: pointer;\n  transition: ease-in-out 0.3s;\n  box-sizing: border-box;\n  padding: auto;\n  /* border: 1px solid #d8d8d8; */\n}\n\n.bubble-boy:hover {\n  border-width: 1px 0 1px 1px;\n  border-style: solid;\n  border-color: #d8d8d8;\n  width: 46px;\n}\n\n.nodes-svg {\n  width: 30px;\n  height: 30px;\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: contain;\n}\n\n#pk-enhance-btn {\n  background-color: red;\n}\n\n#pk-enhancer-container {\n  position: fixed;\n  bottom: 60px;\n  right: 20px;\n  z-index: 10000;\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -27786,49 +27796,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
 /* harmony import */ var _contentScript_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./contentScript.css */ "./src/contentScript/contentScript.css");
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
 
 
 
 console.log("Content script loaded!"); // Debug line
 var imageUrl = chrome.runtime.getURL("nodes_nbg_dark.svg");
 
+// React component
+var Bubble = function Bubble() {
+  var handleClick = function handleClick() {
+    chrome.runtime.sendMessage({
+      type: "openSidePanel"
+    }, function (response) {
+      console.log("Background response:", response);
+    });
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "bubble-boy",
+    onClick: handleClick
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "nodes-svg",
+    style: {
+      backgroundImage: "url(".concat(imageUrl, ")")
+    }
+  }));
+};
+var Enhancer = function Enhancer() {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState2 = _slicedToArray(_useState, 2),
+    chatInput = _useState2[0],
+    setChatInput = _useState2[1]; // State for contenteditable content
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var editableDiv = null;
+    var trackContentEditable = function trackContentEditable() {
+      editableDiv = document.querySelector("#composer-background [contenteditable='true']");
+      if (editableDiv) {
+        console.log("ContentEditable div found:", editableDiv);
+        var handleInput = function handleInput() {
+          var content = editableDiv.innerText || "";
+          setChatInput(content);
+          chrome.runtime.sendMessage({
+            type: "contenteditableUpdate",
+            content: content
+          }, function (response) {
+            if (chrome.runtime.lastError) {
+              console.error("Message failed:", chrome.runtime.lastError.message);
+            } else {
+              console.log("Background response (Enhancer):", response);
+            }
+          });
+        };
+        editableDiv.addEventListener("input", handleInput);
+        editableDiv.addEventListener("keyup", handleInput);
+
+        // Sync initial content
+        handleInput();
+        return function () {
+          editableDiv.removeEventListener("input", handleInput);
+          editableDiv.removeEventListener("keyup", handleInput);
+        };
+      } else {
+        console.warn("ContentEditable div not found, retrying...");
+      }
+    };
+
+    // Add slight delay to avoid early DOM observation
+    var observer = new MutationObserver(function () {
+      setTimeout(trackContentEditable, 100); // Delay by 100ms
+    });
+    trackContentEditable();
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+    return function () {
+      observer.disconnect();
+      if (editableDiv) {
+        editableDiv.removeEventListener("input", function () {});
+        editableDiv.removeEventListener("keyup", function () {});
+      }
+    };
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    console.log("Updated chatInput state:", chatInput);
+  }, [chatInput]);
+  var handleClick = function handleClick() {
+    console.log("Enhancer clicked. Current Input:", chatInput);
+    chrome.runtime.sendMessage({
+      type: "contenteditableUpdate",
+      content: chatInput
+    }, function (response) {
+      console.log("Background response (Enhancer):", response);
+    });
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    className: "enhance-btn",
+    onClick: handleClick
+  }, "Enhance Prompt");
+};
+
 // Function to create the bubble and append it to the DOM
 var createBubble = function createBubble() {
   // Check if the bubble already exists
   if (document.getElementById("bubble-container")) return;
-  console.log("Creating the bubble...");
-  var container = document.createElement("div");
-  container.id = "bubble-container"; // Add a unique ID
-  document.body.appendChild(container);
 
-  // React component
-  var Bubble = function Bubble() {
-    var handleClick = function handleClick() {
-      chrome.runtime.sendMessage({
-        type: "openSidePanel"
-      }, function (response) {
-        console.log("Background response:", response);
-      });
-    };
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      className: "bubble-boy",
-      onClick: handleClick
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      className: "nodes-svg",
-      style: {
-        backgroundImage: "url(".concat(imageUrl, ")")
-      }
-    }));
-  };
-  react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(container).render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Bubble, null));
+  // Bubble creation
+  console.log("Creating the bubble...");
+  var bubbleContainer = document.createElement("div");
+  bubbleContainer.id = "bubble-container";
+  document.body.appendChild(bubbleContainer);
+  react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(bubbleContainer).render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Bubble, null));
+};
+// Function to create the enhancer and append it to the DOM
+var createEnhancer = function createEnhancer() {
+  if (document.getElementById("pk-enhancer-container")) return; // Prevent duplicates
+
+  console.log("Creating the enhancer...");
+  var enhancerContainer = document.createElement("div");
+  enhancerContainer.id = "pk-enhancer-container";
+  document.body.appendChild(enhancerContainer);
+  react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(enhancerContainer).render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Enhancer, null));
 };
 
 // Initial bubble injection
 createBubble();
+createEnhancer();
 
 // Use MutationObserver to monitor DOM changes
 var observer = new MutationObserver(function () {
   createBubble(); // Re-inject the bubble if removed
+  createEnhancer(); // Re-inject the enhancer if removed
 });
 
 // Start observing the body for changes

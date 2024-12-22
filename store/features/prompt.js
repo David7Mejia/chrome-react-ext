@@ -1,47 +1,56 @@
-const GET_ENHANCED_PROMPT = "promtp/GET_ENAHNCED_PROMPT";
+const GET_ENHANCED_PROMPT = "prompt/GET_ENHANCED_PROMPT";
 
 //******ACTIONS******//
-export const getEnhancedPrompt = prompt => ({
+export const getEnhancedPrompt = ({ prompt, framework }) => ({
   type: GET_ENHANCED_PROMPT,
   prompt,
+  framework,
 });
 
 //******THUNKS******//
-
-// curl http://localhost:3000/api/v1/prediction/196a5a49-bd9a-4741-8008-a403960db7ad \
-//  -d '{"question": "Hey, how are you?"}' \
 export const getEnhancedPromptThunk =
-  ({ message }) =>
+  ({ prompt, framework }) =>
   async dispatch => {
-    // const res = await fetch("http://localhost:3000/api/v1/prediction/196a5a49-bd9a-4741-8008-a403960db7ad ", {
-    const res = await fetch("http://localhost:5500/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ message }),
-      data: `{"question": "${message}"}`,
-    });
+    try {
+      const res = await fetch("http://localhost:5500/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt, framework }),
+      });
 
-    if (res.ok) {
-      const prompt = await res.json();
-      console.log("inside the thunk prompt", prompt);
-      dispatch(getEnhancedPrompt(prompt));
+      if (res.ok) {
+        const data = await res.json();
+        console.log("This is the prompt:", prompt);
+        console.log("This is the framework:", framework);
+        console.log("Inside the thunk response data:", data);
+
+        dispatch(getEnhancedPrompt({ prompt: data.prompt, framework: data.framework }));
+      } else {
+        console.error("Failed to fetch enhanced prompt");
+      }
+    } catch (error) {
+      console.error("Thunk API Error:", error);
     }
   };
 
 //******REDUCER******//
 
-const initialState = {};
+const initialState = {
+  prompt: "",
+  framework: "",
+};
 
 const promptReducer = (state = initialState, action) => {
-  let newState;
   switch (action.type) {
     case GET_ENHANCED_PROMPT:
-      console.log("this is the state ", state, action);
-      newState = Object.assign({}, state);
-      newState.prompt = action.prompt;
-      return newState;
+      console.log("Reducer Action:", action);
+      return {
+        ...state,
+        prompt: action.prompt,
+        framework: action.framework,
+      };
     default:
       return state;
   }
