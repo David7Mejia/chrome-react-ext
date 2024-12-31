@@ -60,7 +60,7 @@ function getHtmlPlugins(chunks) {
   return chunks.map(
     chunk =>
       new HtmlPlugin({
-        title: "Promptking",
+        title: "Oculus",
         filename: `${chunk}.html`,
         chunks: [chunk],
       })

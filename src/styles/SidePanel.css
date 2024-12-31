@@ -1,50 +1,231 @@
 body {
   box-sizing: border-box;
-  height: calc(100vh - 16px);
+  height: calc(100vh);
+  margin: 0;
+  /* background: #eef2f3;
+
+  background: linear-gradient(180deg, #eef2f3 0%, hsla(229, 28%, 88%, 1) 100%); */
+
+  /* background: linear-gradient(180deg, #f8f8f8 0%, rgba(195, 216, 236, 0.3) 100%);
+   */
+  /* light */
+  /* background: hsl(240 10% 3.9%); */
+  background: #f5f5f5;
+  /* background: linear-gradient(180deg, rgba(220, 220, 220, 1) 0%, rgba(251, 251, 252, 1) 22%, rgba(254, 254, 255, 1) 100%); */
 }
 
 .sidepanel-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
-  padding: 8px;
   box-sizing: border-box;
+  height: 100vh;
+  /* background-color: #f5f5f5; */
+  padding: 20px;
 }
 
 .sidepanel-top {
   margin-bottom: auto; /* Pushes this content to the top */
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
 }
 
 .greeting-ptag {
+  font-family: "Georama", sans-serif;
+  margin-bottom: 15px;
   font-size: 36px;
+  font-weight: 600;
+  /* color: #d8d8d8; */
+
+  /* neomorphism */
+
   margin: 0;
+  /* margin-bottom: 5px; */
+
+  /* font-weight: 800; */
+  font-weight: bold;
+  background-color: #aab4c8;
+  color: transparent;
+  text-shadow: 2px 2px 3px rgba(243, 243, 243, 0.5);
+  background-clip: text;
 }
 
 .greeting-span {
-  font-size: 18px;
+  align-self: flex-start;
+  font-size: 24px;
+  color: #666;
 }
 
 .chatbox-area {
+  display: flex;
   flex-grow: 1; /* Makes the chatbox area expand to fill the space */
   overflow-y: auto; /* Adds scrolling for overflowed content */
   /* border-radius: 16px; */
   /* border: 1px solid #d8d8d8; */
   /* padding: 16px; Adds padding inside the chatbox area */
   margin-bottom: 16px;
-}
-
-.sidepanel-input {
-  height: 40px;
-  width: 100%; /* Ensures the input spans the full width */
-  border: 1px solid #d8d8d8;
-  border-radius: 8px;
-  padding: 8px;
-  box-sizing: border-box;
-  resize: none;
-  margin-top: auto; /* Pushes the input to the bottom */
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .promptking_root {
   height: 100%;
+}
+
+.sidepanel-form {
+  margin: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.framework-select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #d8d8d8;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.enhance-prompt-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #00f9d3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.enhance-prompt-btn:hover {
+  background-color: #0056b3;
+}
+
+.enhance-prompt-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.enhanced-result {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #e9ecef;
+  border-radius: 8px;
+}
+
+.enhanced-result h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.enhanced-result p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Base Styles */
+.sidepanel-input {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 8px;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 100px;
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 10px;
+
+  /* Background Animation */
+  background: linear-gradient(white, white), linear-gradient(90deg, #d8d8d8 0%, #d8d8d8 40%, rgb(0 255 165 / 47%), #00ffff 60%, #ff00ff 70%, #d8d8d8 80%, #d8d8d8 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-size: 400% 400%;
+  animation: border-flow 6s ease-in-out infinite alternate;
+
+  /* Smooth Transition */
+  transition: box-shadow 0.4s ease-in-out, filter 0.4s ease-in-out, border-radius 0.4s ease-in-out;
+}
+
+/* Outer Aura - Always Visible */
+.sidepanel-input::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+  background-size: 400% 400%;
+  animation: border-flow 6s ease-in-out infinite alternate;
+  filter: blur(8px);
+  z-index: -1;
+  opacity: 0.6;
+  pointer-events: none;
+  transition: filter 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+/* Inner Aura - Always Visible */
+.sidepanel-input::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+  background-size: 400% 400%;
+  animation: border-flow 6s ease-in-out infinite alternate;
+  filter: blur(16px);
+  z-index: -2;
+  opacity: 0.4;
+  pointer-events: none;
+  transition: filter 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+/* Focus State Enhancements */
+.sidepanel-input:focus {
+  outline: none;
+  border: 1px solid transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  animation: border-flow 3s ease-in-out infinite alternate;
+
+  /* Enhanced Glow (Preserved from Original) */
+  box-shadow: 0 0 4px rgb(0 255 165 / 47%), 0 0 7px rgb(0 138 255 / 41%);
+  transition: box-shadow 0.4s ease-in-out;
+}
+
+/* Enhanced Aura on Focus */
+.sidepanel-input:focus::before {
+  filter: blur(12px);
+  opacity: 0.8;
+  transition: filter 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+.sidepanel-input:focus::after {
+  filter: blur(24px);
+  opacity: 0.6;
+  transition: filter 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+/* Keyframes */
+@keyframes border-flow {
+  0% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 50% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

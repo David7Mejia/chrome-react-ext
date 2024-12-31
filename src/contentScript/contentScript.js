@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./contentScript.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 console.log("Content script loaded!"); // Debug line
 const imageUrl = chrome.runtime.getURL("nodes_nbg_dark.svg");
@@ -23,71 +23,59 @@ const Bubble = () => {
 };
 
 const Enhancer = () => {
-  const [chatInput, setChatInput] = useState(""); // State for contenteditable content
+  const editableDivRef = useRef(null); // Ref to store the contenteditable div
 
   useEffect(() => {
-    let editableDiv = null;
-
     const trackContentEditable = () => {
-      editableDiv = document.querySelector("#composer-background [contenteditable='true']");
+      const editableDiv = document.querySelector("#prompt-textarea");
 
       if (editableDiv) {
         console.log("ContentEditable div found:", editableDiv);
-
-        const handleInput = () => {
-          const content = editableDiv.innerText || "";
-          setChatInput(content);
-
-          chrome.runtime.sendMessage({ type: "contenteditableUpdate", content }, response => {
-            if (chrome.runtime.lastError) {
-              console.error("Message failed:", chrome.runtime.lastError.message);
-            } else {
-              console.log("Background response (Enhancer):", response);
-            }
-          });
-        };
-
-        editableDiv.addEventListener("input", handleInput);
-        editableDiv.addEventListener("keyup", handleInput);
-
-        // Sync initial content
-        handleInput();
-
-        return () => {
-          editableDiv.removeEventListener("input", handleInput);
-          editableDiv.removeEventListener("keyup", handleInput);
-        };
+        editableDivRef.current = editableDiv; // Store the reference
       } else {
         console.warn("ContentEditable div not found, retrying...");
       }
     };
 
-    // Add slight delay to avoid early DOM observation
+    // Initial Tracking
+    trackContentEditable();
+
+    // Observe DOM for dynamic changes
     const observer = new MutationObserver(() => {
-      setTimeout(trackContentEditable, 100); // Delay by 100ms
+      setTimeout(trackContentEditable, 100); // Slight delay for stability
     });
 
-    trackContentEditable();
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       observer.disconnect();
-      if (editableDiv) {
-        editableDiv.removeEventListener("input", () => {});
-        editableDiv.removeEventListener("keyup", () => {});
-      }
     };
   }, []);
 
-  useEffect(() => {
-    console.log("Updated chatInput state:", chatInput);
-  }, [chatInput]);
-
   const handleClick = () => {
-    console.log("Enhancer clicked. Current Input:", chatInput);
+    if (!editableDivRef.current) {
+      console.warn("ContentEditable div not found at click time.");
+      alert("Unable to find the input field. Please try again.");
+      return;
+    }
 
-    chrome.runtime.sendMessage({ type: "contenteditableUpdate", content: chatInput }, response => {
-      console.log("Background response (Enhancer):", response);
+    const content = editableDivRef.current.innerText.trim(); // Get and trim content
+
+    if (!content) {
+      console.warn("No content in the input field.");
+      alert("Please enter some text before enhancing the prompt.");
+      return;
+    }
+
+    console.log("Enhancer clicked. Current Input:", content);
+
+    // Send content to the background script
+    chrome.runtime.sendMessage({ type: "contenteditableUpdate", content }, response => {
+      if (chrome.runtime.lastError) {
+        console.error("Message failed:", chrome.runtime.lastError.message);
+      } else {
+        console.log("Background response (Enhancer):", response);
+      }
     });
   };
 
@@ -97,7 +85,6 @@ const Enhancer = () => {
     </button>
   );
 };
-
 
 // Function to create the bubble and append it to the DOM
 const createBubble = () => {

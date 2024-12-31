@@ -31,16 +31,14 @@ const SidePanel = () => {
   return (
     <div className="sidepanel-container">
       <div className="sidepanel-top">
-        <p className="greeting-ptag">PromptKing</p>
+        {/* <p className="greeting-ptag">OCULUS</p> */}
         <span className="greeting-span">How can I assist you today?</span>
       </div>
 
       <div className="chatbox-area">
         <Formik initialValues={{ prompt: "" }} onSubmit={() => handleEnhance()}>
           {({ handleSubmit }) => (
-            <form onSubmit={handleSubmit}>
-              <textarea name="prompt" placeholder="Enter your prompt here..." value={prompt} onChange={e => setPrompt(e.target.value)} rows="5" className="sidepanel-input" />
-
+            <form onSubmit={handleSubmit} className="sidepanel-form">
               <select value={selectedFramework} onChange={e => setSelectedFramework(e.target.value)} className="framework-select">
                 <option value="" disabled>
                   Select Framework
@@ -51,8 +49,9 @@ const SidePanel = () => {
                   </option>
                 ))}
               </select>
+              <textarea name="prompt" placeholder="Enter your prompt here..." value={prompt} onChange={e => setPrompt(e.target.value)} rows="5" className="sidepanel-input" />
 
-              <button type="submit" onClick={handleEnhance} disabled={loading} className="enhance-prompt-btn">
+              <button type="submit" disabled={loading} className="enhance-prompt-btn">
                 {loading ? "Enhancing..." : "Enhance Prompt"}
               </button>
             </form>

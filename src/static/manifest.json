@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Promptking",
+  "name": "Oculus",
   "version": "1.0",
   "description": "Testin ts and react extension",
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Promptking",
+    "default_title": "Oculus",
     "default_action": "promptking.png"
   },
   "icons": {

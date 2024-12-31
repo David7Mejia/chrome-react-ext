@@ -27796,12 +27796,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
 /* harmony import */ var _contentScript_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./contentScript.css */ "./src/contentScript/contentScript.css");
-function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
@@ -27829,72 +27823,59 @@ var Bubble = function Bubble() {
   }));
 };
 var Enhancer = function Enhancer() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
-    _useState2 = _slicedToArray(_useState, 2),
-    chatInput = _useState2[0],
-    setChatInput = _useState2[1]; // State for contenteditable content
+  var editableDivRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null); // Ref to store the contenteditable div
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var editableDiv = null;
     var trackContentEditable = function trackContentEditable() {
-      editableDiv = document.querySelector("#composer-background [contenteditable='true']");
+      var editableDiv = document.querySelector("#prompt-textarea");
       if (editableDiv) {
         console.log("ContentEditable div found:", editableDiv);
-        var handleInput = function handleInput() {
-          var content = editableDiv.innerText || "";
-          setChatInput(content);
-          chrome.runtime.sendMessage({
-            type: "contenteditableUpdate",
-            content: content
-          }, function (response) {
-            if (chrome.runtime.lastError) {
-              console.error("Message failed:", chrome.runtime.lastError.message);
-            } else {
-              console.log("Background response (Enhancer):", response);
-            }
-          });
-        };
-        editableDiv.addEventListener("input", handleInput);
-        editableDiv.addEventListener("keyup", handleInput);
-
-        // Sync initial content
-        handleInput();
-        return function () {
-          editableDiv.removeEventListener("input", handleInput);
-          editableDiv.removeEventListener("keyup", handleInput);
-        };
+        editableDivRef.current = editableDiv; // Store the reference
       } else {
         console.warn("ContentEditable div not found, retrying...");
       }
     };
 
-    // Add slight delay to avoid early DOM observation
-    var observer = new MutationObserver(function () {
-      setTimeout(trackContentEditable, 100); // Delay by 100ms
-    });
+    // Initial Tracking
     trackContentEditable();
+
+    // Observe DOM for dynamic changes
+    var observer = new MutationObserver(function () {
+      setTimeout(trackContentEditable, 100); // Slight delay for stability
+    });
     observer.observe(document.body, {
       childList: true,
       subtree: true
     });
     return function () {
       observer.disconnect();
-      if (editableDiv) {
-        editableDiv.removeEventListener("input", function () {});
-        editableDiv.removeEventListener("keyup", function () {});
-      }
     };
   }, []);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    console.log("Updated chatInput state:", chatInput);
-  }, [chatInput]);
   var handleClick = function handleClick() {
-    console.log("Enhancer clicked. Current Input:", chatInput);
+    if (!editableDivRef.current) {
+      console.warn("ContentEditable div not found at click time.");
+      alert("Unable to find the input field. Please try again.");
+      return;
+    }
+    var content = editableDivRef.current.innerText.trim(); // Get and trim content
+
+    if (!content) {
+      console.warn("No content in the input field.");
+      alert("Please enter some text before enhancing the prompt.");
+      return;
+    }
+    console.log("Enhancer clicked. Current Input:", content);
+
+    // Send content to the background script
     chrome.runtime.sendMessage({
       type: "contenteditableUpdate",
-      content: chatInput
+      content: content
     }, function (response) {
-      console.log("Background response (Enhancer):", response);
+      if (chrome.runtime.lastError) {
+        console.error("Message failed:", chrome.runtime.lastError.message);
+      } else {
+        console.log("Background response (Enhancer):", response);
+      }
     });
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {

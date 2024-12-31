@@ -41,3 +41,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Extension installed!");
 });
+
+// chrome.contextMenus.create({
+//   title: "Enhance with Oculus",
+//   id: "enhance-with-oculus",
+//   context: ["page", "selection", "link"],
+// });
