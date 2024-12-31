@@ -11,7 +11,9 @@ body {
   /* light */
   /* background: hsl(240 10% 3.9%); */
   background: #f5f5f5;
-  /* background: linear-gradient(180deg, rgba(220, 220, 220, 1) 0%, rgba(251, 251, 252, 1) 22%, rgba(254, 254, 255, 1) 100%); */
+
+  /* DARK */
+  background: #181a20;
 }
 
 .sidepanel-container {
@@ -56,6 +58,9 @@ body {
   align-self: flex-start;
   font-size: 24px;
   color: #666;
+
+  /* DARK */
+  color: #f5f5f5;
 }
 
 .chatbox-area {
@@ -93,16 +98,21 @@ body {
   width: 100%;
   padding: 10px;
   background-color: #00f9d3;
-  color: white;
+  font-family: "Roboto", sans-serif;
+  /* Sider blue 3E9EF4 */
+  /* background: rgb(0, 249, 211);
+  background: linear-gradient(90deg, rgba(0, 249, 211, 1) 0%, rgba(62, 158, 244, 1) 77%); */
+  color: rgb(52, 52, 52);
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  /* font-weight: bold; */
   transition: background-color 0.3s ease;
 }
 
 .enhance-prompt-btn:hover {
-  background-color: #0056b3;
+  background-color: #3e9ef4;
 }
 
 .enhance-prompt-btn:disabled {
