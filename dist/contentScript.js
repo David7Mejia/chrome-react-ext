@@ -27831,9 +27831,10 @@ var Enhancer = function Enhancer() {
       if (editableDiv) {
         console.log("ContentEditable div found:", editableDiv);
         editableDivRef.current = editableDiv; // Store the reference
-      } else {
-        console.warn("ContentEditable div not found, retrying...");
       }
+      // else {
+      //   console.warn("ContentEditable div not found, retrying...");
+      // }
     };
 
     // Initial Tracking
