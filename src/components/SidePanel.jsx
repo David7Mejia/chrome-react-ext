@@ -73,7 +73,14 @@ const SidePanel = () => {
                   ))}
                 </select>
               )}
-              <textarea name="prompt" placeholder="Enter your prompt here..." value={prompt} onChange={e => setPrompt(e.target.value)} rows="5" className="sidepanel-input" />
+              <textarea
+                name="prompt"
+                placeholder={selectedTab === 0 ? "Enter your prompt here..." : "Type your message..."}
+                value={prompt}
+                onChange={e => setPrompt(e.target.value)}
+                rows="5"
+                className="sidepanel-input"
+              />
 
               <button type="submit" disabled={loading} className="enhance-prompt-btn">
                 {/* {loading ? "Enhancing..." : "Enhance Prompt"} */}

@@ -12,7 +12,7 @@ export const getEnhancedPromptThunk =
   ({ prompt, framework }) =>
   async dispatch => {
     try {
-      const res = await fetch("http://localhost:5500/", {
+      const res = await fetch("http://localhost:5500/enhance", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
