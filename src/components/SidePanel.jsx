@@ -9,8 +9,8 @@ const SidePanel = () => {
   const dispatch = useDispatch();
   const enhancedResult = useSelector(state => state.prompt.enhancedPrompt);
   const loading = useSelector(state => state.prompt.loading);
-  const state = useSelector(state => state);
-  console.log("Redux State Test:", state);
+  // const state = useSelector(state => state);
+  // console.log("Redux State Test:", state);
 
   const [prompt, setPrompt] = useState("");
   const [selectedFramework, setSelectedFramework] = useState("");
@@ -29,12 +29,14 @@ const SidePanel = () => {
   };
   useEffect(() => {
     console.log("this is the prompt", prompt);
-  }, [selectedTab]);
+    // console.log("this is the state ********: ", state);
+  }, [selectedTab, prompt]);
 
   return (
     <div className="sidepanel-container">
       <div className="sidepanel-top">
         {/* <p className="greeting-ptag">OCULUS</p> */}
+        {prompt}
         <span className="greeting-span">How can I assist you today?</span>
         <div className="sidepanel-tabs">
           <div
@@ -56,7 +58,7 @@ const SidePanel = () => {
           </div>
         </div>
       </div>
-
+      <div className="sp-message-container">hello here is where the message wil go</div>
       <div className="chatbox-area">
         <Formik initialValues={{ prompt: "" }} onSubmit={() => handleEnhance()}>
           {({ handleSubmit }) => (
@@ -77,7 +79,10 @@ const SidePanel = () => {
                 name="prompt"
                 placeholder={selectedTab === 0 ? "Enter your prompt here..." : "Type your message..."}
                 value={prompt}
-                onChange={e => setPrompt(e.target.value)}
+                onChange={e => {
+                  console.log("this is the value:", e.target.value);
+                  setPrompt(e.target.value);
+                }}
                 rows="5"
                 className="sidepanel-input"
               />

@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./contentScript.css";
-import { useState, useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
 
 console.log("Content script loaded!"); // Debug line
 const imageUrl = chrome.runtime.getURL("nodes_nbg_dark.svg");
 
-// React component
+// React component for the bubble
 const Bubble = () => {
   const handleClick = () => {
     chrome.runtime.sendMessage({ type: "openSidePanel" }, response => {
@@ -17,50 +17,20 @@ const Bubble = () => {
   return (
     <div className="bubble-boy" onClick={handleClick}>
       <div className="nodes-svg" style={{ backgroundImage: `url(${imageUrl})` }} />
-      {/* <img src={imageUrl} alt="No" className="nodes-svg" /> */}
     </div>
   );
 };
 
-const Enhancer = () => {
-  const editableDivRef = useRef(null); // Ref to store the contenteditable div
-
-  useEffect(() => {
-    const trackContentEditable = () => {
-      const editableDiv = document.querySelector("#prompt-textarea");
-
-      if (editableDiv) {
-        console.log("ContentEditable div found:", editableDiv);
-        editableDivRef.current = editableDiv; // Store the reference
-      }
-      // else {
-      //   console.warn("ContentEditable div not found, retrying...");
-      // }
-    };
-
-    // Initial Tracking
-    trackContentEditable();
-
-    // Observe DOM for dynamic changes
-    const observer = new MutationObserver(() => {
-      setTimeout(trackContentEditable, 100); // Slight delay for stability
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
+// React component for the enhancer button
+const Enhancer = ({ targetRef }) => {
   const handleClick = () => {
-    if (!editableDivRef.current) {
-      console.warn("ContentEditable div not found at click time.");
+    if (!targetRef.current) {
+      console.warn("Target textarea not found.");
       alert("Unable to find the input field. Please try again.");
       return;
     }
 
-    const content = editableDivRef.current.innerText.trim(); // Get and trim content
+    const content = targetRef.current.innerText.trim(); // Get and trim content
 
     if (!content) {
       console.warn("No content in the input field.");
@@ -71,7 +41,7 @@ const Enhancer = () => {
     console.log("Enhancer clicked. Current Input:", content);
 
     // Send content to the background script
-    chrome.runtime.sendMessage({ type: "contenteditableUpdate", content }, response => {
+    chrome.runtime.sendMessage({ type: "enhancePrompt", content }, response => {
       if (chrome.runtime.lastError) {
         console.error("Message failed:", chrome.runtime.lastError.message);
       } else {
@@ -87,12 +57,56 @@ const Enhancer = () => {
   );
 };
 
+// Function to dynamically track and inject the enhancer button
+const trackAndInjectEnhancer = () => {
+  const targetRef = useRef(null);
+
+  const trackTarget = () => {
+    const target = document.querySelector("#composer-background #prompt-textarea");
+    if (target) {
+      console.log("Target textarea found:", target);
+      targetRef.current = target;
+      injectEnhancer(target, targetRef);
+    } else {
+      console.warn("Target textarea not found, retrying...");
+    }
+  };
+
+  const injectEnhancer = (target, ref) => {
+    if (document.getElementById("enhancer-btn-container")) return; // Prevent duplicates
+
+    console.log("Injecting enhancer...");
+    const enhancerContainer = document.createElement("div");
+    enhancerContainer.id = "enhancer-btn-container";
+    enhancerContainer.style.position = "absolute";
+    enhancerContainer.style.top = `${target.offsetTop + target.offsetHeight + 10}px`;
+    enhancerContainer.style.left = `${target.offsetLeft}px`;
+    enhancerContainer.style.zIndex = "1000";
+
+    document.body.appendChild(enhancerContainer);
+
+    ReactDOM.createRoot(enhancerContainer).render(<Enhancer targetRef={ref} />);
+  };
+
+  // Initial tracking and injection
+  trackTarget();
+
+  // Observe DOM changes for dynamic injection
+  const observer = new MutationObserver(() => {
+    setTimeout(trackTarget, 100); // Delay for stability
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  return () => {
+    observer.disconnect();
+  };
+};
+
 // Function to create the bubble and append it to the DOM
 const createBubble = () => {
-  // Check if the bubble already exists
   if (document.getElementById("bubble-container")) return;
 
-  // Bubble creation
   console.log("Creating the bubble...");
   const bubbleContainer = document.createElement("div");
   bubbleContainer.id = "bubble-container";
@@ -100,28 +114,15 @@ const createBubble = () => {
 
   ReactDOM.createRoot(bubbleContainer).render(<Bubble />);
 };
-// Function to create the enhancer and append it to the DOM
-const createEnhancer = () => {
-  if (document.getElementById("pk-enhancer-container")) return; // Prevent duplicates
 
-  console.log("Creating the enhancer...");
-  const enhancerContainer = document.createElement("div");
-  enhancerContainer.id = "pk-enhancer-container";
-
-  document.body.appendChild(enhancerContainer);
-
-  ReactDOM.createRoot(enhancerContainer).render(<Enhancer />);
-};
-
-// Initial bubble injection
+// Inject the bubble and track the enhancer button
 createBubble();
-createEnhancer();
+trackAndInjectEnhancer();
 
-// Use MutationObserver to monitor DOM changes
+// Use MutationObserver to re-inject if elements are removed
 const observer = new MutationObserver(() => {
-  createBubble(); // Re-inject the bubble if removed
-  createEnhancer(); // Re-inject the enhancer if removed
+  createBubble();
+  trackAndInjectEnhancer();
 });
 
-// Start observing the body for changes
 observer.observe(document.body, { childList: true, subtree: true });
