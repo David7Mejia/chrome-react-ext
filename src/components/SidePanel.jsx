@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/SidePanel.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik } from "formik";
-import { getEnhancedPromptThunk } from "../../store/features/prompt";
+import { getEnhancedPromptThunk, streamEnhancedPromptThunk } from "../../store/features/prompt";
 import cn from "classnames";
 
 const SidePanel = () => {
@@ -25,7 +25,8 @@ const SidePanel = () => {
     }
 
     // Dispatching the thunk with the current prompt and selected framework
-    dispatch(getEnhancedPromptThunk({ prompt: prompt, framework: selectedFramework }));
+    // dispatch(getEnhancedPromptThunk({ prompt: prompt, framework: selectedFramework }));
+    dispatch(streamEnhancedPromptThunk({ prompt: prompt, framework: selectedFramework }));
   };
   useEffect(() => {
     console.log("this is the prompt", prompt);

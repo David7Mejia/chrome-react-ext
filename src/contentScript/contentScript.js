@@ -1,12 +1,19 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import React, { useState, useEffect, useCallback } from "react";
+import { createRoot } from "react-dom/client";
 import "./contentScript.css";
-import { useRef, useEffect } from "react";
+import cn from "classnames";
 
-console.log("Content script loaded!"); // Debug line
+// Load bubble image from extension
 const imageUrl = chrome.runtime.getURL("nodes_nbg_dark.svg");
 
-// React component for the bubble
+// Input detection constants
+const INPUT_SELECTORS = {
+  textarea: "textarea, #prompt-textarea",
+  contentEditable: '[contenteditable="true"]',
+  placeholder: "[data-placeholder]",
+};
+
+// Bubble Component
 const Bubble = () => {
   const handleClick = () => {
     chrome.runtime.sendMessage({ type: "openSidePanel" }, response => {
@@ -21,108 +28,190 @@ const Bubble = () => {
   );
 };
 
-// React component for the enhancer button
-const Enhancer = ({ targetRef }) => {
-  const handleClick = () => {
-    if (!targetRef.current) {
-      console.warn("Target textarea not found.");
-      alert("Unable to find the input field. Please try again.");
-      return;
+// Main App Component
+const OverlayApp = () => {
+  const [textInputs, setTextInputs] = useState([]);
+  const [focusedId, setFocusedId] = useState(null);
+
+  // Find all text inputs on the page
+  const findTextInputs = useCallback(() => {
+    const inputs = [];
+    Object.values(INPUT_SELECTORS).forEach(selector => {
+      document.querySelectorAll(selector).forEach(element => {
+        const style = window.getComputedStyle(element);
+        if (style.display !== "none" && style.visibility !== "hidden") {
+          inputs.push({
+            id: element.id || `input-${Math.random().toString(36).substr(2, 9)}`,
+            element,
+            type: element.matches(INPUT_SELECTORS.textarea) ? "textarea" : element.matches(INPUT_SELECTORS.contentEditable) ? "contentEditable" : "placeholder",
+            rect: element.getBoundingClientRect(),
+          });
+        }
+      });
+    });
+    return inputs;
+  }, []);
+
+  // Update inputs when DOM changes
+  useEffect(() => {
+    const updateInputs = () => {
+      setTextInputs(findTextInputs());
+    };
+
+    // Initial setup
+    updateInputs();
+
+    // Setup mutation observer
+    const observer = new MutationObserver(() => {
+      requestAnimationFrame(updateInputs);
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["contenteditable", "data-placeholder"],
+    });
+
+    return () => observer.disconnect();
+  }, [findTextInputs]);
+
+  // Setup focus listeners
+  useEffect(() => {
+    const handleFocus = input => {
+      setFocusedId(input.id);
+    };
+
+    const handleBlur = () => {
+      setFocusedId(null);
+    };
+
+    textInputs.forEach(input => {
+      input.element.addEventListener("focus", () => handleFocus(input));
+      input.element.addEventListener("blur", handleBlur);
+    });
+
+    return () => {
+      textInputs.forEach(input => {
+        input.element.removeEventListener("focus", () => handleFocus(input));
+        input.element.removeEventListener("blur", handleBlur);
+      });
+    };
+  }, [textInputs]);
+
+  // Update positions on scroll/resize
+  useEffect(() => {
+    const handleViewportChange = () => {
+      setTextInputs(prev =>
+        prev.map(input => ({
+          ...input,
+          rect: input.element.getBoundingClientRect(),
+        }))
+      );
+    };
+
+    window.addEventListener("scroll", handleViewportChange);
+    window.addEventListener("resize", handleViewportChange);
+
+    return () => {
+      window.removeEventListener("scroll", handleViewportChange);
+      window.removeEventListener("resize", handleViewportChange);
+    };
+  }, []);
+
+  // Enhancer click handler
+  const handleEnhance = useCallback(input => {
+    let content = "";
+    if (input.type === "textarea") {
+      content = input.element.value || input.element.innerText;
+    } else if (input.type === "contentEditable") {
+      content = input.element.innerText;
+    } else {
+      content = input.element.textContent;
     }
 
-    const content = targetRef.current.innerText.trim(); // Get and trim content
-
+    content = content.trim();
     if (!content) {
       console.warn("No content in the input field.");
-      alert("Please enter some text before enhancing the prompt.");
       return;
     }
 
-    console.log("Enhancer clicked. Current Input:", content);
-
-    // Send content to the background script
     chrome.runtime.sendMessage({ type: "enhancePrompt", content }, response => {
       if (chrome.runtime.lastError) {
         console.error("Message failed:", chrome.runtime.lastError.message);
       } else {
-        console.log("Background response (Enhancer):", response);
+        console.log("Background response:", response);
       }
     });
-  };
+  }, []);
 
   return (
-    <button className="enhance-btn" onClick={handleClick}>
-      Enhance Prompt
-    </button>
+    <>
+      {/* Bubble */}
+      <div id="bubble-container">
+        <Bubble />
+      </div>
+
+      {/* Overlays */}
+      <div className="overlay-container">
+        {textInputs.map(
+          input =>
+            focusedId === input.id && (
+              <div
+                // key={input.id}
+                className="input-overlay"
+                style={{
+                  position: "absolute",
+                  top: input.rect.top + window.scrollY,
+                  left: input.rect.left + window.scrollX,
+                  width: input.rect.width,
+                  height: input.rect.height,
+                  zIndex: 9999,
+                }}
+              >
+                <button
+                  className={cn("enhance-btn", {
+                    "enhance-btn--textarea": input.type === "textarea",
+                    "enhance-btn--content-editable": input.type === "contentEditable",
+                    "enhance-btn--placeholder": input.type === "placeholder",
+                  })}
+                  onClick={() => handleEnhance(input)}
+                >
+                  <div className="quick-access-btn" />
+                </button>
+              </div>
+            )
+        )}
+      </div>
+    </>
   );
 };
 
-// Function to dynamically track and inject the enhancer button
-const trackAndInjectEnhancer = () => {
-  const targetRef = useRef(null);
+// Initialize the app
+const initializeOverlay = () => {
+  // Check if app is already initialized
+  if (document.getElementById("prompt-enhancer-root")) return;
 
-  const trackTarget = () => {
-    const target = document.querySelector("#composer-background #prompt-textarea");
-    if (target) {
-      console.log("Target textarea found:", target);
-      targetRef.current = target;
-      injectEnhancer(target, targetRef);
-    } else {
-      console.warn("Target textarea not found, retrying...");
-    }
-  };
+  const root = document.createElement("div");
+  root.id = "prompt-enhancer-root";
+  document.body.appendChild(root);
 
-  const injectEnhancer = (target, ref) => {
-    if (document.getElementById("enhancer-btn-container")) return; // Prevent duplicates
-
-    console.log("Injecting enhancer...");
-    const enhancerContainer = document.createElement("div");
-    enhancerContainer.id = "enhancer-btn-container";
-    enhancerContainer.style.position = "absolute";
-    enhancerContainer.style.top = `${target.offsetTop + target.offsetHeight + 10}px`;
-    enhancerContainer.style.left = `${target.offsetLeft}px`;
-    enhancerContainer.style.zIndex = "1000";
-
-    document.body.appendChild(enhancerContainer);
-
-    ReactDOM.createRoot(enhancerContainer).render(<Enhancer targetRef={ref} />);
-  };
-
-  // Initial tracking and injection
-  trackTarget();
-
-  // Observe DOM changes for dynamic injection
-  const observer = new MutationObserver(() => {
-    setTimeout(trackTarget, 100); // Delay for stability
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
-
-  return () => {
-    observer.disconnect();
-  };
+  createRoot(root).render(<OverlayApp />);
 };
 
-// Function to create the bubble and append it to the DOM
-const createBubble = () => {
-  if (document.getElementById("bubble-container")) return;
+// Run initialization
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeOverlay);
+} else {
+  initializeOverlay();
+}
 
-  console.log("Creating the bubble...");
-  const bubbleContainer = document.createElement("div");
-  bubbleContainer.id = "bubble-container";
-  document.body.appendChild(bubbleContainer);
-
-  ReactDOM.createRoot(bubbleContainer).render(<Bubble />);
-};
-
-// Inject the bubble and track the enhancer button
-createBubble();
-trackAndInjectEnhancer();
-
-// Use MutationObserver to re-inject if elements are removed
-const observer = new MutationObserver(() => {
-  createBubble();
-  trackAndInjectEnhancer();
+// Re-initialize on navigation (for SPAs)
+const navigationObserver = new MutationObserver(() => {
+  requestAnimationFrame(initializeOverlay);
 });
 
-observer.observe(document.body, { childList: true, subtree: true });
+navigationObserver.observe(document.body, {
+  childList: true,
+  subtree: true,
+});

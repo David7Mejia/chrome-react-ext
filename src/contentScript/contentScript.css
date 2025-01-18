@@ -50,3 +50,62 @@
   right: 20px;
   z-index: 10000;
 }
+
+.input-overlay {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.quick-access-btn {
+  /* border-radius: 8px;
+  background-color: red;
+  height: 10px;
+  width: 10px; */
+}
+
+.enhance-btn {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  color: white;
+  background-color: #ff0707;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  overflow: hidden;
+  width: 15px;
+  height: 15px;
+}
+/*
+.enhance-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #00f6ff, transparent);
+  transform: skewX(-45deg);
+  animation: wave 2s infinite;
+}
+
+@keyframes wave {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 0;
+  }
+  100% {
+    left: 100%;
+  }
+} */
+
+.input-overlay {
+  pointer-events: none;
+}
+
+/* Allow the button itself to be clickable */
+.input-overlay .enhance-btn {
+  pointer-events: auto;
+}
