@@ -1,3 +1,4 @@
+/*
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
@@ -41,3 +42,33 @@ root.render(
     </Provider>
   </React.StrictMode>
 );
+
+*/
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { Store } from "webext-redux";
+import SidePanel from "../components/SidePanel";
+
+// 2) Must use the same port name:
+const store = new Store({ portName: "PROMPT_KING" });
+
+store.ready().then(() => {
+  let rootElement = document.getElementById("promptking_root");
+  if (!rootElement) {
+    rootElement = document.createElement("div");
+    rootElement.id = "promptking_root";
+    document.body.appendChild(rootElement);
+  }
+  const root = createRoot(rootElement);
+
+  root.render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <SidePanel />
+      </Provider>
+    </React.StrictMode>
+  );
+
+  console.log("Side panel rendered successfully");
+});
