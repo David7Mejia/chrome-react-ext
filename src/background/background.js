@@ -1,4 +1,3 @@
-/*
 // Listen for messages from content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "contenteditableUpdate") {
@@ -48,16 +47,18 @@ chrome.runtime.onInstalled.addListener(() => {
 //   id: "enhance-with-oculus",
 //   context: ["page", "selection", "link"],
 // });
-*/
 
-//// background.js (Manifest V3)
+//
+
+/*
+background.js (Manifest V3)
 import { configureStore, createSlice, combineReducers } from "@reduxjs/toolkit";
 import { createWrapStore } from "webext-redux";
 
-// 1) Import your existing promptReducer from the file above:
+1) Import your existing promptReducer from the file above:
 import promptReducer from "../../store/features/prompt.js"; // <-- adjust path as needed!
 
-/** 2) appSlice **/
+2) appSlice
 const appSlice = createSlice({
   name: "app",
   initialState: {
@@ -75,24 +76,24 @@ const appSlice = createSlice({
 });
 export const { updateContent, setSidePanelOpen } = appSlice.actions;
 
-/** 3) Combine both reducers into one rootReducer **/
+Combine both reducers into one rootReducer
 const rootReducer = combineReducers({
   app: appSlice.reducer,
   prompt: promptReducer, // <--- now "state.prompt" is handled by your prompt.js code
 });
 
-/** 4) Create the store with rootReducer **/
+4) Create the store with rootReducer
 const store = configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware => getDefaultMiddleware(),
 });
 
-/** 5) wrapStore for MV3 **/
+5) wrapStore for MV3
 const wrapStore = createWrapStore({ portName: "PROMPT_KING" });
 wrapStore(store);
 
-/** 6) Event listeners as before **/
-// Listen for messages from content scripts, etc.
+6) Event listeners as before
+Listen for messages from content scripts, etc.
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "contenteditableUpdate") {
     store.dispatch(updateContent(message.content));
@@ -119,13 +120,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// Optional: tab updates or onInstalled listeners
+Optional: tab updates or onInstalled listeners
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Extension installed!");
   console.log("Initial store state:", store.getState());
 });
 
-// For debugging: see changes in the background console
+For debugging: see changes in the background console
 store.subscribe(() => {
   console.log("Background store updated:", store.getState());
 });
+
+*/

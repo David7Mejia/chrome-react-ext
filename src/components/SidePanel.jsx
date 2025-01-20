@@ -7,8 +7,9 @@ import cn from "classnames";
 
 const SidePanel = () => {
   const dispatch = useDispatch();
-  const enhancedResult = useSelector(state => state.prompt.enhancedPrompt);
+  const promptStream = useSelector(state => state.prompt?.streamedContent);
   const loading = useSelector(state => state.prompt.loading);
+  const [clientMessages, setClientMessages] = useState([]);
   // const state = useSelector(state => state);
   // console.log("Redux State Test:", state);
 
@@ -23,6 +24,10 @@ const SidePanel = () => {
       alert("Please enter a prompt and select a framework.");
       return;
     }
+    //store the prompt in the clientMessages array
+    setClientMessages([...clientMessages, prompt]);
+    //clear the textarea
+    setPrompt("");
 
     // Dispatching the thunk with the current prompt and selected framework
     // dispatch(getEnhancedPromptThunk({ prompt: prompt, framework: selectedFramework }));
@@ -37,7 +42,6 @@ const SidePanel = () => {
     <div className="sidepanel-container">
       <div className="sidepanel-top">
         {/* <p className="greeting-ptag">OCULUS</p> */}
-        {prompt}
         <span className="greeting-span">How can I assist you today?</span>
         <div className="sidepanel-tabs">
           <div
@@ -59,7 +63,7 @@ const SidePanel = () => {
           </div>
         </div>
       </div>
-      <div className="sp-message-container">hello here is where the message wil go</div>
+      <div className="sp-message-container">{promptStream}</div>
       <div className="chatbox-area">
         <Formik initialValues={{ prompt: "" }} onSubmit={() => handleEnhance()}>
           {({ handleSubmit }) => (
@@ -96,12 +100,12 @@ const SidePanel = () => {
           )}
         </Formik>
 
-        {enhancedResult && (
+        {/* {promptStream && (
           <div className="enhanced-result">
             <h4>Enhanced Prompt:</h4>
-            <p>{enhancedResult}</p>
+            <p>{promptStream}</p>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-/*
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
@@ -9,7 +8,7 @@ import promptReducer from "../../store/features/prompt";
 // import "./popup.css";
 import SidePanel from "../components/SidePanel";
 
-// // Logging Middleware
+// Logging Middleware
 const loggerMiddleware = store => next => action => {
   console.group(action.type);
   console.log("%c Previous State:", "color: gray", store.getState());
@@ -43,32 +42,31 @@ root.render(
   </React.StrictMode>
 );
 
-*/
-import React from "react";
-import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import { Store } from "webext-redux";
-import SidePanel from "../components/SidePanel";
+// import React from "react";
+// import { createRoot } from "react-dom/client";
+// import { Provider } from "react-redux";
+// import { Store } from "webext-redux";
+// import SidePanel from "../components/SidePanel";
 
-// 2) Must use the same port name:
-const store = new Store({ portName: "PROMPT_KING" });
+// // 2) Must use the same port name:
+// const store = new Store({ portName: "PROMPT_KING" });
 
-store.ready().then(() => {
-  let rootElement = document.getElementById("promptking_root");
-  if (!rootElement) {
-    rootElement = document.createElement("div");
-    rootElement.id = "promptking_root";
-    document.body.appendChild(rootElement);
-  }
-  const root = createRoot(rootElement);
+// store.ready().then(() => {
+//   let rootElement = document.getElementById("promptking_root");
+//   if (!rootElement) {
+//     rootElement = document.createElement("div");
+//     rootElement.id = "promptking_root";
+//     document.body.appendChild(rootElement);
+//   }
+//   const root = createRoot(rootElement);
 
-  root.render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <SidePanel />
-      </Provider>
-    </React.StrictMode>
-  );
+//   root.render(
+//     <React.StrictMode>
+//       <Provider store={store}>
+//         <SidePanel />
+//       </Provider>
+//     </React.StrictMode>
+//   );
 
-  console.log("Side panel rendered successfully");
-});
+//   console.log("Side panel rendered successfully");
+// });
