@@ -293,6 +293,21 @@ body {
 }
 
 .sp-message-container {
-  color: #f5f5f5;
+  color: #dcdff9eb;
   font-size: 16px;
+}
+
+/* scroll bar width  */
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: #181a20;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #00f9d34f;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #00f9d3;
 }
