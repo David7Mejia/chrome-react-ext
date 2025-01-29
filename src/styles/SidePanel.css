@@ -380,7 +380,6 @@ body {
   background-color: #e6e6e6;
 }
 
-
 .message-bubble {
   max-width: 80%;
   padding: 12px;
@@ -389,14 +388,14 @@ body {
 }
 
 .user-message {
-  background-color: #6060617d;
+  background-color: #5b85ba1f;
   color: white;
   margin-left: auto;
   border-bottom-right-radius: 4px;
 }
 
 .ai-message {
-  background-color: #F0F0F0;
+  background-color: #f0f0f0;
   color: black;
   margin-right: auto;
   border-bottom-left-radius: 4px;
