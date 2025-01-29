@@ -75,6 +75,7 @@ const SidePanel = () => {
       }
     }
   }, [promptStream]);
+
   return (
     <div className="sidepanel-container">
       <div className="sidepanel-top">
@@ -102,7 +103,6 @@ const SidePanel = () => {
           <div className="greeting-span">What can I help you with today?</div>
         </span>
       </div>
-
       <div className="sp-message-container">
         <div className="chat-container">
           {messages.map((msg, index) => (
@@ -111,7 +111,6 @@ const SidePanel = () => {
           {currentStream && <Message content={currentStream} isUser={false} />}
         </div>
       </div>
-
       <div className="chatbox-area">
         <Formik initialValues={{ prompt: "" }} onSubmit={() => handleEnhance()}>
           {({ handleSubmit }) => (
