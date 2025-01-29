@@ -5,11 +5,15 @@ import { Formik } from "formik";
 import { getEnhancedPromptThunk, streamEnhancedPromptThunk } from "../../store/features/prompt";
 import cn from "classnames";
 
+const Message = ({ content, isUser }) => <div className={`message-bubble ${isUser ? "user-message" : "ai-message"}`}>{content}</div>;
+
 const SidePanel = () => {
   const dispatch = useDispatch();
   const promptStream = useSelector(state => state.prompt?.streamedContent);
   const loading = useSelector(state => state.prompt.loading);
   const [clientMessages, setClientMessages] = useState([]);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [messages, setMessages] = useState([]);
   // const state = useSelector(state => state);
   // console.log("Redux State Test:", state);
 
@@ -24,9 +28,11 @@ const SidePanel = () => {
       alert("Please enter a prompt and select a framework.");
       return;
     }
-    //store the prompt in the clientMessages array
-    setClientMessages([...clientMessages, prompt]);
-    //clear the textarea
+    // Add user message to chat
+    const userMessage = { content: prompt, isUser: true };
+    setMessages(prev => [...prev, userMessage]);
+
+    // Clear textarea
     setPrompt("");
 
     // Dispatching the thunk with the current prompt and selected framework
@@ -37,12 +43,70 @@ const SidePanel = () => {
     console.log("this is the prompt", prompt);
     // console.log("this is the state ********: ", state);
   }, [selectedTab, prompt]);
+  useEffect(() => {
+    if (promptStream) {
+      setIsStreaming(true);
+    }
+  }, [promptStream]);
+  const renderStructuredResponse = data => {
+    try {
+      const response = JSON.parse(data);
+      return (
+        <div className="chat-bubble response-bubble">
+          <div className="section original">
+            <h4 className="prompt-section-header">Original Prompt</h4>
+            <p classname="original-prompt">{response?.original_prompt}</p>
+          </div>
+          <div className="section revised">
+            <h4 className="prompt-section-header">Revised Prompt</h4>
+            <p>{response?.revised_prompt}</p>
+          </div>
+          <div className="section questions">
+            <h4 className="prompt-section-header">Questions to Consider</h4>
+            <ul>
+              {response?.questions?.map((q, i) => (
+                <li key={`question-${i}`}>{q?.question}</li>
+              ))}
+            </ul>
+          </div>
 
+          <div className="section suggestions">
+            <h4 className="prompt-section-header">Suggestions</h4>
+            <ul>
+              {response?.suggestions?.map((s, i) => (
+                <li key={`suggestion-${i}`}>{s?.suggestion}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="section meta-info">
+            <div>
+              <strong>Role:</strong> {response?.role}
+            </div>
+            <div>
+              <strong>Context:</strong> {response?.context}
+            </div>
+            <div>
+              <strong>Audience:</strong> {response?.target_audience}
+            </div>
+            <div>
+              <strong>Objective:</strong> {response?.objective}
+            </div>
+          </div>
+        </div>
+      );
+    } catch (e) {
+      return (
+        <div className="chat-bubble response-bubble">
+          <p>{data}</p>
+        </div>
+      );
+    }
+  };
   return (
     <div className="sidepanel-container">
       <div className="sidepanel-top">
         {/* <p className="greeting-ptag">OCULUS</p> */}
-        <span className="greeting-span">How can I assist you today?</span>
         <div className="sidepanel-tabs">
           <div
             className={cn("sidepanel-tab spt-left", {
@@ -50,7 +114,7 @@ const SidePanel = () => {
             })}
             onClick={() => setSelectedTab(0)}
           >
-            ENHANCE
+            ENHANCE PROMPT
           </div>
           <div className="tab-divider"></div>
           <div
@@ -62,8 +126,19 @@ const SidePanel = () => {
             CHAT
           </div>
         </div>
+        <span className="greeting-span-container">
+          <div classname="greeting-ptag">Hey!</div>
+          <div className="greeting-span">What can I help you with today?</div>
+        </span>
       </div>
-      <div className="sp-message-container">{promptStream}</div>
+      <div className="sp-message-container">
+        <div className="chat-container">
+          {messages.map((msg, index) => (
+            <Message key={index} content={msg.content} isUser={msg.isUser} />
+          ))}
+          {promptStream && renderStructuredResponse(promptStream)}
+        </div>
+      </div>
       <div className="chatbox-area">
         <Formik initialValues={{ prompt: "" }} onSubmit={() => handleEnhance()}>
           {({ handleSubmit }) => (
@@ -94,7 +169,7 @@ const SidePanel = () => {
 
               <button type="submit" disabled={loading} className="enhance-prompt-btn">
                 {/* {loading ? "Enhancing..." : "Enhance Prompt"} */}
-                {selectedTab === 0 ? "Enhance Prompt" : "Send Message"}
+                {/* {selectedTab === 0 ? "Enhance Prompt" : "Send Message"} */}
               </button>
             </form>
           )}
