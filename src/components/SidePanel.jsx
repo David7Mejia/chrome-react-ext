@@ -14,7 +14,6 @@ const SidePanel = () => {
   const dispatch = useDispatch();
   const promptStream = useSelector(state => state.prompt?.streamedContent);
   const loading = useSelector(state => state.prompt.loading);
-  const [clientMessages, setClientMessages] = useState([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [messages, setMessages] = useState([]);
   const [currentStream, setCurrentStream] = useState("");
@@ -26,92 +25,83 @@ const SidePanel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
-  };
   const frameworks = ["AIDA", "BAB", "PAS", "GRADE", "CREO", "FAB", "4C's", "PASTOR", "SCAMPER", "KISS", "Hero's Journey"];
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  // Modal Handlers
+  const showModal = () => setIsModalOpen(true);
+  const handleOk = () => setIsModalOpen(false);
+  const handleCancel = () => setIsModalOpen(false);
+  const toggleCollapsed = () => setCollapsed(!collapsed);
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const items = [
-    {
-      key: "1",
-      icon: <PieChartOutlined />,
-      label: "Option 1",
-    },
-    {
-      key: "2",
-      icon: <DesktopOutlined />,
-      label: "Option 2",
-    },
-    {
-      key: "3",
-      icon: <ContainerOutlined />,
-      label: "Option 3",
-    },
-    {
-      key: "sub1",
-      label: "Navigation One",
-      icon: <MailOutlined />,
-      children: [
-        {
-          key: "5",
-          label: "Option 5",
-        },
-        {
-          key: "6",
-          label: "Option 6",
-        },
-        {
-          key: "7",
-          label: "Option 7",
-        },
-        {
-          key: "8",
-          label: "Option 8",
-        },
-      ],
-    },
-    {
-      key: "sub2",
-      label: "Navigation Two",
-      icon: <AppstoreOutlined />,
-      children: [
-        {
-          key: "9",
-          label: "Option 9",
-        },
-        {
-          key: "10",
-          label: "Option 10",
-        },
-        {
-          key: "sub3",
-          label: "Submenu",
-          children: [
-            {
-              key: "11",
-              label: "Option 11",
-            },
-            {
-              key: "12",
-              label: "Option 12",
-            },
-          ],
-        },
-      ],
-    },
-  ];
+  // const items = [
+  //   {
+  //     key: "1",
+  //     icon: <PieChartOutlined />,
+  //     label: "Option 1",
+  //   },
+  //   {
+  //     key: "2",
+  //     icon: <DesktopOutlined />,
+  //     label: "Option 2",
+  //   },
+  //   {
+  //     key: "3",
+  //     icon: <ContainerOutlined />,
+  //     label: "Option 3",
+  //   },
+  //   {
+  //     key: "sub1",
+  //     label: "Navigation One",
+  //     icon: <MailOutlined />,
+  //     children: [
+  //       {
+  //         key: "5",
+  //         label: "Option 5",
+  //       },
+  //       {
+  //         key: "6",
+  //         label: "Option 6",
+  //       },
+  //       {
+  //         key: "7",
+  //         label: "Option 7",
+  //       },
+  //       {
+  //         key: "8",
+  //         label: "Option 8",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     key: "sub2",
+  //     label: "Navigation Two",
+  //     icon: <AppstoreOutlined />,
+  //     children: [
+  //       {
+  //         key: "9",
+  //         label: "Option 9",
+  //       },
+  //       {
+  //         key: "10",
+  //         label: "Option 10",
+  //       },
+  //       {
+  //         key: "sub3",
+  //         label: "Submenu",
+  //         children: [
+  //           {
+  //             key: "11",
+  //             label: "Option 11",
+  //           },
+  //           {
+  //             key: "12",
+  //             label: "Option 12",
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  // ];
 
   const content = (
     <div>
@@ -121,54 +111,37 @@ const SidePanel = () => {
     </div>
   );
 
-  const [messageHistory, setMessageHistory] = useState([]);
-  const [currentResponse, setCurrentResponse] = useState(null);
-
   const handleEnhance = () => {
     if (!prompt) {
       alert("Please enter a prompt and select a framework.");
       return;
     }
-
-    const newMessagePair = {
-      id: Date.now(),
-      userMessage: prompt,
-      aiResponse: null,
-    };
-
-    setMessageHistory(prev => [...prev, newMessagePair]);
+    const userMessage = { content: prompt, isUser: true };
+    setMessages(prev => [...prev, userMessage]);
+    setCurrentStream("");
     setPrompt("");
-
-    dispatch(
-      streamEnhancedPromptThunk({
-        prompt: prompt,
-        framework: selectedFramework,
-        messageId: newMessagePair.id,
-      })
-    );
+    dispatch(streamEnhancedPromptThunk({ prompt: prompt, framework: selectedFramework }));
   };
-
 
   useEffect(() => {
     if (promptStream) {
       setIsStreaming(true);
       try {
-        // const response = JSON.parse(promptStream);
-        // let markdown = "";
-
-        // // Format markdown content
         // if (response.original_prompt) markdown += `### Original Prompt\n${response.original_prompt}\n\n`;
         // if (response.revised_prompt) markdown += `### Revised Prompt\n${response.revised_prompt}\n\n`;
+
         // if (response.questions?.length) {
         //   markdown += `### Questions to Consider\n`;
         //   response.questions.forEach(q => (markdown += `- ${q.question}\n`));
         //   markdown += "\n";
         // }
+
         // if (response.suggestions?.length) {
         //   markdown += `### Suggestions\n`;
         //   response.suggestions.forEach(s => (markdown += `- ${s.suggestion}\n`));
         //   markdown += "\n";
         // }
+
         // if (response.role || response.context || response.target_audience || response.objective) {
         //   markdown += `### Additional Information\n`;
         //   if (response.role) markdown += `**Role:** ${response.role}\n`;
@@ -177,41 +150,12 @@ const SidePanel = () => {
         //   if (response.objective) markdown += `**Objective:** ${response.objective}\n`;
         // }
 
-        // Find and update only the most recent message pair
-        setMessageHistory(prev => {
-          const lastPair = prev[prev.length - 1];
-          if (lastPair && !lastPair.aiResponse) {
-            // Only update if there's no AI response yet
-            return prev.map((pair, index) =>
-              index === prev.length - 1 ? { ...pair, aiResponse: markdown } : pair
-            );
-          }
-          return prev;
-        });
-
+        setCurrentStream(JSON.parse(promptStream));
       } catch (e) {
-        // Handle streaming updates for the most recent message only
-        setMessageHistory(prev => {
-          const lastPair = prev[prev.length - 1];
-          if (lastPair && !lastPair.aiResponse) {
-            return prev.map((pair, index) =>
-              index === prev.length - 1 ? { ...pair, aiResponse: promptStream } : pair
-            );
-          }
-          return prev;
-        });
+        setCurrentStream(promptStream);
       }
     }
   }, [promptStream]);
-
-  const renderMessages = () => {
-    return messageHistory.map((pair, index) => (
-      <React.Fragment key={pair.id}>
-        <Message content={pair.userMessage} isUser={true} />
-        {pair.aiResponse && <Message content={pair.aiResponse} isUser={false} />}
-      </React.Fragment>
-    ));
-  };
 
   return (
     <div className="sidepanel-container">
@@ -242,7 +186,12 @@ const SidePanel = () => {
       </div>
 
       <div className="sp-message-container">
-        <div className="chat-container">{renderMessages()}</div>
+        <div className="chat-container">
+          {messages.map((msg, index) => (
+            <Message key={index} content={msg.content} isUser={msg.isUser} />
+          ))}
+          {currentStream && <Message content={currentStream} isUser={false} />}
+        </div>
       </div>
 
       <div className="chatbox-area">
