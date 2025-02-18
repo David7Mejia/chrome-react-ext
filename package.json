@@ -16,7 +16,9 @@
     "webpack-merge": "^6.0.1"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.6.1",
     "@reduxjs/toolkit": "^2.5.0",
+    "antd": "^5.23.3",
     "classnames": "^2.5.1",
     "formik": "^2.4.6",
     "react": "^19.0.0",

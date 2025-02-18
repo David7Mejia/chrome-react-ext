@@ -24,7 +24,7 @@ const SidePanel = () => {
   const frameworks = ["AIDA", "BAB", "PAS", "GRADE", "CREO", "FAB", "4C's", "PASTOR", "SCAMPER", "KISS", "Hero's Journey"];
 
   const handleEnhance = () => {
-    if (!prompt || !selectedFramework) {
+    if (!prompt) {
       alert("Please enter a prompt and select a framework.");
       return;
     }
