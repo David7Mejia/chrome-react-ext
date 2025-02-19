@@ -28,7 +28,10 @@ const SidePanel = () => {
   const frameworks = ["AIDA", "BAB", "PAS", "GRADE", "CREO", "FAB", "4C's", "PASTOR", "SCAMPER", "KISS", "Hero's Journey"];
 
   // Modal Handlers
-  const showModal = () => setIsModalOpen(true);
+  const showModal = () => {
+    setIsModalOpen(true);
+    console.log("these are the messages in the sidepanel:", messages);
+  };
   const handleOk = () => setIsModalOpen(false);
   const handleCancel = () => setIsModalOpen(false);
   const toggleCollapsed = () => setCollapsed(!collapsed);
@@ -158,6 +161,7 @@ const SidePanel = () => {
   }, [promptStream]);
 
   return (
+    // Create. Refine. Dominate. Tagline for the tool
     <div className="sidepanel-container">
       <div className="sidepanel-top">
         <div className="sidepanel-tabs">
@@ -180,8 +184,17 @@ const SidePanel = () => {
           </div>
         </div>
         <span className="greeting-span-container">
-          <div classname="greeting-ptag">Hey!</div>
-          <div className="greeting-span">What can I help you with today?</div>
+          {selectedTab === 0 ? (
+            <>
+              <div className="greeting-ptag">Hey!</div>
+              <div className="greeting-span">Let’s craft the perfect prompt!</div>
+            </>
+          ) : (
+            <>
+              <div className="greeting-ptag">Hey!</div>
+              <div className="greeting-span">What can I help you with today?</div>
+            </>
+          )}
         </span>
       </div>
 
@@ -216,12 +229,21 @@ const SidePanel = () => {
               )}
               <div className="toolbar-container">
                 <div className="toolbar-left">
+                  {selectedTab === 0 ? <Button className="new-prompt-btn">New Prompt +</Button> : <Button className="new-prompt-btn">New Chat +</Button>}
                   <Button
+                    className="swap-chat-btn"
                     // className="advanced-options-btn"
                     type="filled"
                     onClick={showModal}
                   >
-                    <SwapOutlined className="swap-icon" style={{ fontSize: "16px", color: "#08c" }} />
+                    <SwapOutlined
+                      className="swap-icon"
+                      style={{
+                        fontSize: "16px",
+                        color: "#fff",
+                        // color: "#08c"
+                      }}
+                    />
                     {/* Advanced */}
                   </Button>
                   {/* {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} */}

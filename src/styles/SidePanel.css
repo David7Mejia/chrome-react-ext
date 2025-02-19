@@ -37,8 +37,9 @@ body {
   align-content: center;
   align-items: center;
   background-color: #181a20;
-  position: sticky;
+  position: fixed;
   top: 0;
+  width: calc(100% - 32px);
 }
 
 .greeting-ptag {
@@ -321,6 +322,7 @@ body {
 .sp-message-container {
   color: #dcdff9eb;
   font-size: 14px;
+  margin-top: 200px;
   /* overflow-y: scroll; */
   /* height: 50%; */
 }
@@ -424,14 +426,24 @@ body {
 .upload-btn,
 .more-btn,
 .voice-btn,
-.category-btn {
+.category-btn,
+.swap-chat-btn {
+  box-sizing: border-box;
   cursor: pointer;
   background-repeat: no-repeat;
   background-position: center;
   background-color: transparent;
-  width: 25px !important;
-  height: 25px !important;
+  width: 32px !important;
+  height: 32px !important;
   padding: 5px;
+}
+
+.new-prompt-btn {
+  font-size: 12px;
+  border: 1px solid #55dccc6e;
+  background-color: transparent;
+
+  color: #55dccc;
 }
 .advanced-options-popover {
   color: white;
@@ -469,22 +481,25 @@ body {
 .toolbar-left {
   display: flex;
   align-items: center;
-  column-gap: 5px;
+  /* column-gap: 5px; */
 }
 .toolbar-right {
   display: flex;
-  column-gap: 5px;
+  /* column-gap: 5px; */
 }
 /*  */
-
-
 
 .message-bubble {
   animation: fadeIn 0.3s ease;
 }
 
-
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
