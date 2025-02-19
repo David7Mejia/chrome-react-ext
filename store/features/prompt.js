@@ -3,6 +3,7 @@ const GET_ENHANCED_PROMPT = "prompt/GET_ENHANCED_PROMPT";
 const UPDATE_STREAMING_PROMPT = "prompt/UPDATE_STREAMING_PROMPT";
 const COMPLETE_STREAMING = "prompt/COMPLETE_STREAMING";
 const UPDATE_METADATA = "prompt/UPDATE_METADATA";
+const CLEAR_STREAMING = "prompt/CLEAR_STREAMING";
 
 //******ACTIONS******
 export const getEnhancedPrompt = ({ enhancedPrompt, framework }) => ({
@@ -24,6 +25,10 @@ export const completeStreaming = metadata => ({
 export const updateMetadata = metadata => ({
   type: UPDATE_METADATA,
   metadata,
+});
+
+export const clearStreaming = () => ({
+  type: CLEAR_STREAMING,
 });
 
 //******THUNKS******
@@ -76,6 +81,8 @@ export const streamEnhancedPromptThunk =
   ({ prompt, framework }) =>
   async dispatch => {
     try {
+      dispatch(clearStreaming());
+
       const response = await fetch("http://localhost:5500/enhance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -179,7 +186,12 @@ const promptReducer = (state = initialState, action) => {
           ...action.metadata,
         },
       };
-
+    case CLEAR_STREAMING:
+      return {
+        ...state,
+        streamedContent: "",
+        isStreaming: false,
+      };
     default:
       return state;
   }

@@ -16,6 +16,8 @@ const SidePanel = () => {
   const loading = useSelector(state => state.prompt.loading);
   const [isStreaming, setIsStreaming] = useState(false);
   const [messages, setMessages] = useState([]);
+
+  //REMOVE currentStream
   const [currentStream, setCurrentStream] = useState("");
 
   const [prompt, setPrompt] = useState("");
@@ -121,45 +123,43 @@ const SidePanel = () => {
     }
     const userMessage = { content: prompt, isUser: true };
     setMessages(prev => [...prev, userMessage]);
-    setCurrentStream("");
+    // setCurrentStream("");
     setPrompt("");
     dispatch(streamEnhancedPromptThunk({ prompt: prompt, framework: selectedFramework }));
   };
 
+  // useEffect(() => {
+  //   if (promptStream) {
+  //     setIsStreaming(true);
+  //     try {
+
+  //       setCurrentStream(JSON.parse(promptStream));
+  //     } catch (e) {
+  //       setCurrentStream(promptStream);
+  //     }
+  //   }
+  // }, [promptStream]);
   useEffect(() => {
-    if (promptStream) {
-      setIsStreaming(true);
-      try {
-        // if (response.original_prompt) markdown += `### Original Prompt\n${response.original_prompt}\n\n`;
-        // if (response.revised_prompt) markdown += `### Revised Prompt\n${response.revised_prompt}\n\n`;
+    if (!promptStream) return;
 
-        // if (response.questions?.length) {
-        //   markdown += `### Questions to Consider\n`;
-        //   response.questions.forEach(q => (markdown += `- ${q.question}\n`));
-        //   markdown += "\n";
-        // }
-
-        // if (response.suggestions?.length) {
-        //   markdown += `### Suggestions\n`;
-        //   response.suggestions.forEach(s => (markdown += `- ${s.suggestion}\n`));
-        //   markdown += "\n";
-        // }
-
-        // if (response.role || response.context || response.target_audience || response.objective) {
-        //   markdown += `### Additional Information\n`;
-        //   if (response.role) markdown += `**Role:** ${response.role}\n`;
-        //   if (response.context) markdown += `**Context:** ${response.context}\n`;
-        //   if (response.target_audience) markdown += `**Audience:** ${response.target_audience}\n`;
-        //   if (response.objective) markdown += `**Objective:** ${response.objective}\n`;
-        // }
-
-        setCurrentStream(JSON.parse(promptStream));
-      } catch (e) {
-        setCurrentStream(promptStream);
+    // Whenever promptStream updates, we handle a new chunk
+    setMessages(prevMessages => {
+      // If there's no message yet OR the last message is the user's,
+      // we create a NEW AI message with this chunk:
+      if (prevMessages.length === 0 || prevMessages[prevMessages.length - 1].isUser) {
+        return [...prevMessages, { content: promptStream, isUser: false }];
+      } else {
+        // Otherwise, the last message is already AI,
+        // so we append the new chunk to it:
+        const lastIdx = prevMessages.length - 1;
+        const updatedLast = {
+          ...prevMessages[lastIdx],
+          content: promptStream,
+        };
+        return [...prevMessages.slice(0, -1), updatedLast];
       }
-    }
+    });
   }, [promptStream]);
-
   return (
     // Create. Refine. Dominate. Tagline for the tool
     <div className="sidepanel-container">
@@ -203,7 +203,7 @@ const SidePanel = () => {
           {messages.map((msg, index) => (
             <Message key={index} content={msg.content} isUser={msg.isUser} />
           ))}
-          {currentStream && <Message content={currentStream} isUser={false} />}
+          {/* {currentStream && <Message content={currentStream} isUser={false} />} */}
         </div>
       </div>
 
