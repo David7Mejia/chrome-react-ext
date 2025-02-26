@@ -21,19 +21,17 @@ body {
   margin: 0;
   /* DARK */
   background: #181a20;
-  /* transition: background 2s ease-in-out; */
+  transition: all 2s ease-in-out;
 }
 
 .sidepanel-top.mode-focus {
-  background: linear-gradient(180deg, rgba(0, 249, 211, 1) -20%, rgba(24, 26, 32, 1) 100%);
-  transition: background 2s ease-in-out;
-  animation: fadeIn 0.6s ease;
+  /* transition: background 2s ease-in-out; */
+  /* animation: fadeIn 0.6s ease; */
 }
 
 .sidepanel-top.mode-flow {
-  background: linear-gradient(180deg, rgba(255, 0, 255, 1) -20%, rgba(24, 26, 32, 1) 100%);
-  transition: background 2s ease-in-out;
-  animation: fadeIn 0.6s ease;
+  /* transition: background 2s ease-in-out; */
+  /* animation: fadeIn 0.6s ease; */
 }
 
 .sidepanel-top::before {
@@ -68,17 +66,6 @@ body {
 
 .sidepanel-top.mode-flow::after {
   opacity: 1;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .sidepanel-container {
@@ -340,18 +327,65 @@ body {
     background-position: 0% 50%;
   }
 }
+/* TABS ANIMATION */
 
 .sidepanel-tabs {
   display: flex;
   margin: 10px 0;
   height: 40px;
-  background-color: transparent;
+  /* background-color: transparent; */
   /* border-bottom: #d8d8d8; */
   width: 100%;
   border-radius: 8px;
   align-items: center;
   cursor: pointer;
-  border: 1px solid #00f9d3;
+  /* border: 1px solid #00f9d3; */
+  background: linear-gradient(#181a20, #181a20), linear-gradient(90deg, transparent, rgb(177, 87, 255) 40%, rgb(255, 0, 191), #00ffff 60%, #ff00ff 70%, rgb(87, 241, 255) 80%, transparent 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-size: 400% 400%;
+  animation: border-flow 6s ease-in-out infinite alternate;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  transition: box-shadow 0.4s ease-in-out, filter 0.4s ease-in-out, border-radius 0.4s ease-in-out;
+}
+
+/* Outer Aura - Always Visible */
+.sidepanel-tabs::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+  background-size: 400% 400%;
+  animation: border-flow 6s ease-in-out infinite alternate;
+  filter: blur(8px);
+  z-index: -1;
+  opacity: 0.6;
+  pointer-events: none;
+  transition: filter 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+/* Inner Aura - Always Visible */
+.sidepanel-tabs::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+  background-size: 400% 400%;
+  animation: border-flow 6s ease-in-out infinite alternate;
+  filter: blur(16px);
+  z-index: -2;
+  opacity: 0.4;
+  pointer-events: none;
+  transition: filter 0.4s ease-in-out, opacity 0.4s ease-in-out;
 }
 
 .sidepanel-tab {
@@ -391,9 +425,10 @@ body {
 .sp-message-container {
   color: #dcdff9eb;
   font-size: 14px;
-  margin-top: 200px;
-  /* overflow-y: scroll; */
-  /* height: 50%; */
+  margin-top: calc(23vh + 40px); /* 23vh for sidepanel-top height + 40px for tabs/controls */
+
+  /* position: relative; */
+  /* z-index: 1; */
 }
 
 .chat-bubble {
@@ -559,6 +594,9 @@ body {
 /*  */
 
 .message-bubble {
+  animation: fadeIn 0.3s ease;
+}
+.message-bubble.animate {
   animation: fadeIn 0.3s ease;
 }
 

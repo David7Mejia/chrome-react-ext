@@ -30,7 +30,7 @@ const SidePanel = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [messages, setMessages] = useState([]);
   const [promptModeSwitch, setPromptModeSwitch] = useState(true);
-
+  const [shouldAnimate, setShouldAnimate] = useState(true);
   //REMOVE currentStream
   const [currentStream, setCurrentStream] = useState("");
 
