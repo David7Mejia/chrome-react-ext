@@ -167,13 +167,9 @@ const SidePanel = () => {
   // }, [promptStream]);
 
   useEffect(() => {
-    if (promptModeSwitch) {
-      document.body.classList.add("mode-focus");
-      document.body.classList.remove("mode-flow");
-    } else {
-      document.body.classList.add("mode-flow");
-      document.body.classList.remove("mode-focus");
-    }
+    let container = document.querySelector(".sidepanel-top");
+
+    promptModeSwitch ? (container.classList.add("mode-focus"), container.classList.remove("mode-flow")) : (container.classList.add("mode-flow"), container.classList.remove("mode-focus"));
   }, [promptModeSwitch]);
 
   useEffect(() => {
@@ -199,84 +195,86 @@ const SidePanel = () => {
   }, [promptStream]);
   return (
     // Create. Refine. Dominate. Tagline for the tool
-    <div className="sidepanel-container">
-      <div className="sidepanel-top">
-        <div className="sidepanel-tabs">
-          <div
-            className={cn("sidepanel-tab spt-left", {
-              selected_tab: selectedTab === 0,
-            })}
-            onClick={() => setSelectedTab(0)}
-          >
-            ENHANCE PROMPT
+    <>
+      {/* <div className="gradient-overlay"> */}
+      <div className="sidepanel-container">
+        <div className="sidepanel-top">
+          <div className="sidepanel-tabs">
+            <div
+              className={cn("sidepanel-tab spt-left", {
+                selected_tab: selectedTab === 0,
+              })}
+              onClick={() => setSelectedTab(0)}
+            >
+              ENHANCE PROMPT
+            </div>
+            <div className="tab-divider"></div>
+            <div
+              className={cn("sidepanel-tab spt-right", {
+                selected_tab: selectedTab === 1,
+              })}
+              onClick={() => setSelectedTab(1)}
+            >
+              CHAT
+            </div>
           </div>
-          <div className="tab-divider"></div>
-          <div
-            className={cn("sidepanel-tab spt-right", {
-              selected_tab: selectedTab === 1,
-            })}
-            onClick={() => setSelectedTab(1)}
-          >
-            CHAT
+          <span className="greeting-span-container">
+            {selectedTab === 0 ? (
+              <>
+                <div className="greeting-ptag">Hey!</div>
+                <div className="greeting-span">Let’s craft the perfect prompt!</div>
+              </>
+            ) : (
+              <>
+                <div className="greeting-ptag">Hey!</div>
+                <div className="greeting-span">What can I help you with today?</div>
+              </>
+            )}
+          </span>
+        </div>
+
+        <div className="sp-message-container">
+          <div className="chat-container">
+            {messages.map((msg, index) => (
+              <Message key={index} content={msg.content} isUser={msg.isUser} />
+            ))}
+            {/* {currentStream && <Message content={currentStream} isUser={false} />} */}
           </div>
         </div>
-        <span className="greeting-span-container">
-          {selectedTab === 0 ? (
-            <>
-              <div className="greeting-ptag">Hey!</div>
-              <div className="greeting-span">Let’s craft the perfect prompt!</div>
-            </>
-          ) : (
-            <>
-              <div className="greeting-ptag">Hey!</div>
-              <div className="greeting-span">What can I help you with today?</div>
-            </>
-          )}
-        </span>
-      </div>
 
-      <div className="sp-message-container">
-        <div className="chat-container">
-          {messages.map((msg, index) => (
-            <Message key={index} content={msg.content} isUser={msg.isUser} />
-          ))}
-          {/* {currentStream && <Message content={currentStream} isUser={false} />} */}
-        </div>
-      </div>
-
-      <div className="chatbox-area">
-        <Formik initialValues={{ prompt: "" }} onSubmit={() => handleEnhance()}>
-          {({ handleSubmit }) => (
-            <form onSubmit={handleSubmit} className="sidepanel-form">
-              {selectedTab === 0 && (
-                <Modal title="Prompt Settings" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                  <select value={selectedFramework} onChange={e => setSelectedFramework(e.target.value)} className="framework-select">
-                    <option value="" disabled>
-                      Select Framework
-                    </option>
-                    {frameworks.map((framework, index) => (
-                      <option key={index} value={framework}>
-                        {framework}
+        <div className="chatbox-area">
+          <Formik initialValues={{ prompt: "" }} onSubmit={() => handleEnhance()}>
+            {({ handleSubmit }) => (
+              <form onSubmit={handleSubmit} className="sidepanel-form">
+                {selectedTab === 0 && (
+                  <Modal title="Prompt Settings" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                    <select value={selectedFramework} onChange={e => setSelectedFramework(e.target.value)} className="framework-select">
+                      <option value="" disabled>
+                        Select Framework
                       </option>
-                    ))}
-                  </select>
-                  <p>Some contents...</p>
-                </Modal>
-                // <Menu defaultSelectedKeys={["1"]} defaultOpenKeys={["sub1"]} mode="inline" theme="dark" inlineCollapsed={collapsed} items={items} />
-              )}
-              <div className="toolbar-container">
-                <div className="toolbar-left">
-                  <Switch
-                    className={cn("prompt-mode-switch", {
-                      switch_on: promptModeSwitch,
-                      switch_off: !promptModeSwitch,
-                    })}
-                    checked={promptModeSwitch}
-                    onChange={setPromptModeSwitch}
-                    checkedChildren="Focus"
-                    unCheckedChildren="Flow"
-                  />
-                  {/* <Button
+                      {frameworks.map((framework, index) => (
+                        <option key={index} value={framework}>
+                          {framework}
+                        </option>
+                      ))}
+                    </select>
+                    <p>Some contents...</p>
+                  </Modal>
+                  // <Menu defaultSelectedKeys={["1"]} defaultOpenKeys={["sub1"]} mode="inline" theme="dark" inlineCollapsed={collapsed} items={items} />
+                )}
+                <div className="toolbar-container">
+                  <div className="toolbar-left">
+                    <Switch
+                      className={cn("prompt-mode-switch", {
+                        switch_on: promptModeSwitch,
+                        switch_off: !promptModeSwitch,
+                      })}
+                      checked={promptModeSwitch}
+                      onChange={setPromptModeSwitch}
+                      checkedChildren="Focus"
+                      unCheckedChildren="Flow"
+                    />
+                    {/* <Button
                   className="swap-chat-btn"
                   // className="advanced-options-btn"
                   type="filled"
@@ -291,52 +289,54 @@ const SidePanel = () => {
                     }}
                   />
                   </Button> */}
-                  {/* {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} */}
-                  <Popover
-                    overlayClassName="advanced-options-popover"
-                    color="#21262d"
-                    arrow={false}
-                    placement="topLeft"
-                    className="advanced-options-btn"
-                    content={content}
-                    trigger="click"
-                    type="primary"
-                    onClick={toggleCollapsed}
-                    style={{ marginBottom: 16 }}
-                  ></Popover>
+                    {/* {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} */}
+                    <Popover
+                      overlayClassName="advanced-options-popover"
+                      color="#21262d"
+                      arrow={false}
+                      placement="topLeft"
+                      className="advanced-options-btn"
+                      content={content}
+                      trigger="click"
+                      type="primary"
+                      onClick={toggleCollapsed}
+                      style={{ marginBottom: 16 }}
+                    ></Popover>
 
-                  {/* <Switch checkedChildren="Focus" unCheckedChildren="Flow" defaultChecked /> */}
-                  {/* {selectedTab === 0 ? <Button className="new-prompt-btn">New Prompt +</Button> : <Button className="new-prompt-btn">New Chat +</Button>} */}
+                    {/* <Switch checkedChildren="Focus" unCheckedChildren="Flow" defaultChecked /> */}
+                    {/* {selectedTab === 0 ? <Button className="new-prompt-btn">New Prompt +</Button> : <Button className="new-prompt-btn">New Chat +</Button>} */}
 
-                  <Button className="new-prompt-btn" onClick={handleNewPrompt}>
-                    {selectedTab === 0 ? "New Prompt +" : "New Chat +"}
-                  </Button>
+                    <Button className="new-prompt-btn" onClick={handleNewPrompt}>
+                      {selectedTab === 0 ? "New Prompt +" : "New Chat +"}
+                    </Button>
+                  </div>
+
+                  <div className="toolbar-right">
+                    {/* <Button className="voice-btn" type="filled" onClick={showModal}></Button> */}
+                    {/* <Button className="category-btn" type="filled" onClick={showModal}></Button> */}
+
+                    {/* <Button className="more-btn" type="filled" onClick={showModal}></Button> */}
+                  </div>
                 </div>
-
-                <div className="toolbar-right">
-                  {/* <Button className="voice-btn" type="filled" onClick={showModal}></Button> */}
-                  {/* <Button className="category-btn" type="filled" onClick={showModal}></Button> */}
-
-                  {/* <Button className="more-btn" type="filled" onClick={showModal}></Button> */}
-                </div>
-              </div>
-              <textarea
-                name="prompt"
-                placeholder={selectedTab === 0 ? "Enter your prompt here..." : "Type your message..."}
-                value={prompt}
-                onChange={e => {
-                  console.log("this is the value:", e.target.value);
-                  setPrompt(e.target.value);
-                }}
-                rows="5"
-                className="sidepanel-input"
-              />
-              <button type="submit" disabled={loading} className="enhance-prompt-btn" />
-            </form>
-          )}
-        </Formik>
+                <textarea
+                  name="prompt"
+                  placeholder={selectedTab === 0 ? "Enter your prompt here..." : "Type your message..."}
+                  value={prompt}
+                  onChange={e => {
+                    console.log("this is the value:", e.target.value);
+                    setPrompt(e.target.value);
+                  }}
+                  rows="5"
+                  className="sidepanel-input"
+                />
+                <button type="submit" disabled={loading} className="enhance-prompt-btn" />
+              </form>
+            )}
+          </Formik>
+        </div>
       </div>
-    </div>
+      {/* </div> */}
+    </>
   );
 };
 
