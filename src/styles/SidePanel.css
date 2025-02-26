@@ -1,3 +1,11 @@
+/* GREEN
+#00f9d3 tabs and send
+#00f9d34f
+#55dccc6e
+#55dccc NEW Prompt btn
+highlight #5ae184
+*/
+
 body {
   box-sizing: border-box;
   height: calc(100vh);
@@ -10,12 +18,70 @@ body {
    */
   /* light */
   /* background: hsl(240 10% 3.9%); */
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
 
   /* DARK */
   background: #181a20;
+  transition: background 2s ease-in-out;
 
   /* #080411 */
+}
+
+body.mode-focus {
+  background: linear-gradient(180deg, rgba(0, 249, 211, 1) -20%, rgba(24, 26, 32, 1) 25%);
+  transition: background 2s ease-in-out;
+  animation: fadeIn 0.6s ease;
+}
+
+body.mode-flow {
+  background: linear-gradient(180deg, rgba(255, 0, 255, 1) -20%, rgba(24, 26, 32, 1) 25%);
+  transition: background 2s ease-in-out;
+  animation: fadeIn 0.6s ease;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0, 249, 211, 1) -20%, rgba(24, 26, 32, 1) 25%);
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  z-index: -1;
+}
+
+body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(255, 0, 255, 1) -20%, rgba(24, 26, 32, 1) 25%);
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  z-index: -1;
+}
+
+body.mode-focus::before {
+  opacity: 1;
+}
+
+body.mode-flow::after {
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .sidepanel-container {
@@ -36,7 +102,7 @@ body {
   flex-direction: column;
   align-content: center;
   align-items: center;
-  background-color: #181a20;
+  /* background-color: #181a20; */
   position: fixed;
   top: 0;
   width: calc(100% - 32px);
@@ -502,4 +568,19 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* SWTICH MODE */
+
+.prompt-mode-switch {
+  color: white;
+  display: flex;
+  background: #55dcccc9 !important;
+}
+
+.switch_on {
+  background: #55dcccc9 !important;
+}
+.switch_off {
+  background-color: #ff00ff !important;
 }

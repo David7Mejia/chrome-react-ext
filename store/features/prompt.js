@@ -4,12 +4,23 @@ const UPDATE_STREAMING_PROMPT = "prompt/UPDATE_STREAMING_PROMPT";
 const COMPLETE_STREAMING = "prompt/COMPLETE_STREAMING";
 const UPDATE_METADATA = "prompt/UPDATE_METADATA";
 const CLEAR_STREAMING = "prompt/CLEAR_STREAMING";
+const UPDATE_CHAT_ID = "prompt/UPDATE_CHAT_ID";
+const CLEAR_CHAT_ID = "prompt/CLEAR_CHAT_ID";
 
 //******ACTIONS******
 export const getEnhancedPrompt = ({ enhancedPrompt, framework }) => ({
   type: GET_ENHANCED_PROMPT,
   enhancedPrompt,
   framework,
+});
+
+export const updateChatId = chatId => ({
+  type: UPDATE_CHAT_ID,
+  chatId,
+});
+
+export const clearChatId = () => ({
+  type: CLEAR_CHAT_ID,
 });
 
 export const updateStreamingPrompt = text => ({
@@ -78,7 +89,7 @@ export const getEnhancedPromptThunk =
   };
 
 export const streamEnhancedPromptThunk =
-  ({ prompt, framework }) =>
+  ({ prompt, framework, chatId }) =>
   async dispatch => {
     try {
       dispatch(clearStreaming());
@@ -86,7 +97,7 @@ export const streamEnhancedPromptThunk =
       const response = await fetch("http://localhost:5500/enhance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, framework }),
+        body: JSON.stringify({ prompt, framework, ...(chatId && { chatId }) }),
       });
 
       if (!response.ok) {
@@ -116,6 +127,9 @@ export const streamEnhancedPromptThunk =
             switch (parsed.type) {
               case "metadata":
                 dispatch(updateMetadata(parsed.metadata));
+                if (parsed.metadata?.chatId) {
+                  dispatch(updateChatId(parsed.metadata.chatId));
+                }
                 break;
               case "content":
                 dispatch(updateStreamingPrompt(parsed.text));
@@ -142,6 +156,7 @@ const initialState = {
   framework: "",
   isStreaming: false,
   streamedContent: "",
+  chatId: null,
   metadata: {
     chatId: null,
     sessionId: null,
@@ -165,6 +180,18 @@ const promptReducer = (state = initialState, action) => {
         ...state,
         isStreaming: true,
         streamedContent: state.streamedContent + action.text,
+      };
+
+    case CLEAR_CHAT_ID:
+      return {
+        ...state,
+        chatId: null,
+      };
+
+    case UPDATE_CHAT_ID:
+      return {
+        ...state,
+        chatId: action.chatId,
       };
 
     case COMPLETE_STREAMING:

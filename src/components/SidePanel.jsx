@@ -5,8 +5,20 @@ import { Formik } from "formik";
 import { getEnhancedPromptThunk, streamEnhancedPromptThunk } from "../../store/features/prompt";
 import ReactMarkdown from "react-markdown";
 import cn from "classnames";
-import { Modal, Button, Dropdown, Menu, Popover, Space } from "antd";
-import { AppstoreOutlined, ContainerOutlined, DesktopOutlined, MailOutlined, MenuFoldOutlined, MenuUnfoldOutlined, PieChartOutlined, SwapOutlined } from "@ant-design/icons";
+// Ant Icons
+import {
+  AppstoreOutlined,
+  ContainerOutlined,
+  DesktopOutlined,
+  MailOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  PieChartOutlined,
+  SwapOutlined,
+  CheckOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
+import { Modal, Button, Dropdown, Menu, Popover, Space, Switch } from "antd";
 
 const Message = ({ content, isUser }) => <div className={`message-bubble ${isUser ? "user-message" : "ai-message"}`}>{isUser ? content : <ReactMarkdown>{content}</ReactMarkdown>}</div>;
 
@@ -14,8 +26,10 @@ const SidePanel = () => {
   const dispatch = useDispatch();
   const promptStream = useSelector(state => state.prompt?.streamedContent);
   const loading = useSelector(state => state.prompt.loading);
+  const chatId = useSelector(state => state.prompt.chatId);
   const [isStreaming, setIsStreaming] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [promptModeSwitch, setPromptModeSwitch] = useState(true);
 
   //REMOVE currentStream
   const [currentStream, setCurrentStream] = useState("");
@@ -118,14 +132,26 @@ const SidePanel = () => {
 
   const handleEnhance = () => {
     if (!prompt) {
-      alert("Please enter a prompt and select a framework.");
+      alert("Please enter a prompt.");
       return;
     }
     const userMessage = { content: prompt, isUser: true };
     setMessages(prev => [...prev, userMessage]);
     // setCurrentStream("");
     setPrompt("");
-    dispatch(streamEnhancedPromptThunk({ prompt: prompt, framework: selectedFramework }));
+    // Only include chatId if it exists (for continuing conversations)
+    const payload = {
+      prompt,
+      framework: selectedFramework,
+      ...(chatId && { chatId }), // Conditionally add chatId
+    };
+    dispatch(streamEnhancedPromptThunk(payload));
+  };
+
+  const handleNewPrompt = () => {
+    setMessages([]);
+    setPrompt("");
+    dispatch(clearChatId());
   };
 
   // useEffect(() => {
@@ -139,6 +165,17 @@ const SidePanel = () => {
   //     }
   //   }
   // }, [promptStream]);
+
+  useEffect(() => {
+    if (promptModeSwitch) {
+      document.body.classList.add("mode-focus");
+      document.body.classList.remove("mode-flow");
+    } else {
+      document.body.classList.add("mode-flow");
+      document.body.classList.remove("mode-focus");
+    }
+  }, [promptModeSwitch]);
+
   useEffect(() => {
     if (!promptStream) return;
 
@@ -229,23 +266,31 @@ const SidePanel = () => {
               )}
               <div className="toolbar-container">
                 <div className="toolbar-left">
-                  {selectedTab === 0 ? <Button className="new-prompt-btn">New Prompt +</Button> : <Button className="new-prompt-btn">New Chat +</Button>}
-                  <Button
-                    className="swap-chat-btn"
-                    // className="advanced-options-btn"
-                    type="filled"
-                    onClick={showModal}
+                  <Switch
+                    className={cn("prompt-mode-switch", {
+                      switch_on: promptModeSwitch,
+                      switch_off: !promptModeSwitch,
+                    })}
+                    checked={promptModeSwitch}
+                    onChange={setPromptModeSwitch}
+                    checkedChildren="Focus"
+                    unCheckedChildren="Flow"
+                  />
+                  {/* <Button
+                  className="swap-chat-btn"
+                  // className="advanced-options-btn"
+                  type="filled"
+                  onClick={showModal}
                   >
-                    <SwapOutlined
-                      className="swap-icon"
-                      style={{
-                        fontSize: "16px",
-                        color: "#fff",
-                        // color: "#08c"
-                      }}
-                    />
-                    {/* Advanced */}
-                  </Button>
+                  <SwapOutlined
+                    className="swap-icon"
+                    style={{
+                    fontSize: "16px",
+                    color: "#fff",
+                    // color: "#08c"
+                    }}
+                  />
+                  </Button> */}
                   {/* {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} */}
                   <Popover
                     overlayClassName="advanced-options-popover"
@@ -259,14 +304,20 @@ const SidePanel = () => {
                     onClick={toggleCollapsed}
                     style={{ marginBottom: 16 }}
                   ></Popover>
-                  <Button className="upload-btn" type="filled" onClick={showModal}></Button>
+
+                  {/* <Switch checkedChildren="Focus" unCheckedChildren="Flow" defaultChecked /> */}
+                  {/* {selectedTab === 0 ? <Button className="new-prompt-btn">New Prompt +</Button> : <Button className="new-prompt-btn">New Chat +</Button>} */}
+
+                  <Button className="new-prompt-btn" onClick={handleNewPrompt}>
+                    {selectedTab === 0 ? "New Prompt +" : "New Chat +"}
+                  </Button>
                 </div>
 
                 <div className="toolbar-right">
-                  <Button className="voice-btn" type="filled" onClick={showModal}></Button>
-                  <Button className="category-btn" type="filled" onClick={showModal}></Button>
+                  {/* <Button className="voice-btn" type="filled" onClick={showModal}></Button> */}
+                  {/* <Button className="category-btn" type="filled" onClick={showModal}></Button> */}
 
-                  <Button className="more-btn" type="filled" onClick={showModal}></Button>
+                  {/* <Button className="more-btn" type="filled" onClick={showModal}></Button> */}
                 </div>
               </div>
               <textarea
