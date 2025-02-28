@@ -41,6 +41,7 @@ const SidePanel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
+
   const frameworks = ["AIDA", "BAB", "PAS", "GRADE", "CREO", "FAB", "4C's", "PASTOR", "SCAMPER", "KISS", "Hero's Journey"];
 
   // Modal Handlers
@@ -197,8 +198,12 @@ const SidePanel = () => {
     // Create. Refine. Dominate. Tagline for the tool
     <>
       {/* <div className="gradient-overlay"> */}
+      <div className="blob"></div>
+
       <div className="sidepanel-container">
         <div className="sidepanel-top">
+          {/* <div className="blob"></div> */}
+
           <div className="sidepanel-tabs">
             <div
               className={cn("sidepanel-tab spt-left", {

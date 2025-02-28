@@ -21,7 +21,7 @@ body {
   margin: 0;
   /* DARK */
   background: #181a20;
-  transition: all 2s ease-in-out;
+  /* transition: all 2s ease-in-out; */
 }
 
 .sidepanel-top.mode-focus {
@@ -34,7 +34,7 @@ body {
   /* animation: fadeIn 0.6s ease; */
 }
 
-.sidepanel-top::before {
+/* .sidepanel-top::before {
   content: "";
   position: absolute;
   top: 0;
@@ -58,7 +58,7 @@ body {
   opacity: 0;
   transition: opacity 0.6s ease-in-out;
   z-index: -1;
-}
+} */
 
 .sidepanel-top.mode-focus::before {
   opacity: 1;
@@ -92,10 +92,11 @@ body {
   width: calc(100%);
   right: 0;
   left: 0;
-  height: 23%;
+  height: 18%;
   box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
+  backdrop-filter: blur(30px);
 }
 
 .greeting-ptag {
@@ -142,10 +143,15 @@ body {
   justify-content: flex-end;
 
   bottom: 0;
-  position: sticky;
+  position: fixed;
   background-color: #181a20;
-  margin-top: 2rem;
-  padding-bottom: 1rem;
+  width: calc(100% - 32px);
+  right: 0;
+  left: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  /* margin-top: 2rem; */
+  /* padding-bottom: 1rem; */
 }
 
 .promptking_root {
@@ -339,6 +345,7 @@ body {
   border-radius: 8px;
   align-items: center;
   cursor: pointer;
+  position: relative; /* Add this */
   /* border: 1px solid #00f9d3; */
   background: linear-gradient(#181a20, #181a20), linear-gradient(90deg, transparent, rgb(177, 87, 255) 40%, rgb(255, 0, 191), #00ffff 60%, #ff00ff 70%, rgb(87, 241, 255) 80%, transparent 100%);
   background-origin: border-box;
@@ -351,7 +358,7 @@ body {
 }
 
 /* Outer Aura - Always Visible */
-.sidepanel-tabs::before {
+/* .sidepanel-tabs::before {
   content: "";
   position: absolute;
   top: -3px;
@@ -367,10 +374,10 @@ body {
   opacity: 0.6;
   pointer-events: none;
   transition: filter 0.4s ease-in-out, opacity 0.4s ease-in-out;
-}
+} */
 
 /* Inner Aura - Always Visible */
-.sidepanel-tabs::after {
+/* .sidepanel-tabs::after {
   content: "";
   position: absolute;
   top: -6px;
@@ -386,12 +393,9 @@ body {
   opacity: 0.4;
   pointer-events: none;
   transition: filter 0.4s ease-in-out, opacity 0.4s ease-in-out;
-}
+} */
 
 .sidepanel-tab {
-  /* color: #00f9d3; */
-  /* border-radius: 8px; */
-
   display: flex;
   color: #f5f5f5;
   font-weight: bold;
@@ -403,6 +407,7 @@ body {
 
   transition: all 0.3s ease-in-out;
 }
+
 .spt-left {
   border-radius: 8px 0 0 8px;
 }
@@ -418,15 +423,16 @@ body {
 }
 
 .selected_tab {
-  background-color: #00f9d34f;
+  background-color: #181a20;
+  /* background-color: #00f9d34f; */
   color: #f5f5f5;
 }
 
 .sp-message-container {
   color: #dcdff9eb;
   font-size: 14px;
-  margin-top: calc(23vh + 40px); /* 23vh for sidepanel-top height + 40px for tabs/controls */
-
+  margin-top: calc(18vh); /* 23vh for sidepanel-top height + 40px for tabs/controls */
+  padding-bottom: 170px;
   /* position: relative; */
   /* z-index: 1; */
 }
@@ -506,10 +512,11 @@ body {
 
 .user-message {
   margin: 8px 0;
-  background-color: #5b85ba1f;
+  background-color: #f1f1f1;
   border-bottom-right-radius: 4px;
   align-self: flex-end;
   margin-inline-start: 22px;
+  color: #2d2e30eb;
 }
 
 .ai-message {
@@ -618,10 +625,33 @@ body {
   display: flex;
   background: #55dcccc9 !important;
 }
-
 .switch_on {
   background: #55dcccc9 !important;
 }
 .switch_off {
   background-color: #ff00ff !important;
 }
+
+.blob {
+  position: fixed;
+  width: calc(55vw);
+  height: calc(30vh);
+  box-shadow: inset 10px 10px 0px 10px #ee6bff, inset -14px -16px 0px 40px #ff6bce, inset 20px 9px 0px 200px #4befff;
+  mix-blend-mode: color-dodge;
+  -webkit-animation: move 25s infinite alternate;
+  animation: move 25s infinite alternate;
+  transition: 1s cubic-bezier(0.07, 0.8, 0.16, 1);
+  /* -webkit-filter: blur(15px); */
+  filter: blur(78px);
+}
+
+/* @keyframes move {
+  from {
+    border-radius: 24% 76% 35% 65% / 27% 36% 64% 73%;
+  }
+
+  to {
+    transform: translate(min(50%, 100vw - 300px), 100px) rotate(180deg);
+    border-radius: 76% 24% 33% 67% / 68% 55% 45% 32%;
+  }
+} */
