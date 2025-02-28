@@ -41,7 +41,6 @@ const SidePanel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
-
   const frameworks = ["AIDA", "BAB", "PAS", "GRADE", "CREO", "FAB", "4C's", "PASTOR", "SCAMPER", "KISS", "Hero's Journey"];
 
   // Modal Handlers
@@ -202,7 +201,7 @@ const SidePanel = () => {
 
       <div className="sidepanel-container">
         <div className="sidepanel-top">
-          {/* <div className="blob"></div> */}
+          {/* <div className="blob2"></div> */}
 
           <div className="sidepanel-tabs">
             <div
@@ -224,16 +223,24 @@ const SidePanel = () => {
             </div>
           </div>
           <span className="greeting-span-container">
-            {selectedTab === 0 ? (
+            {selectedTab === 0 && messages?.length === 0 ? (
               <>
                 <div className="greeting-ptag">Hey!</div>
                 <div className="greeting-span">Let’s craft the perfect prompt!</div>
               </>
             ) : (
               <>
+                {/* <div className="greeting-ptag">Hey!</div>
+                <div className="greeting-span">What can I help you with today?</div> */}
+              </>
+            )}
+            {selectedTab === 1 && messages?.length === 0 ? (
+              <>
                 <div className="greeting-ptag">Hey!</div>
                 <div className="greeting-span">What can I help you with today?</div>
               </>
+            ) : (
+              <></>
             )}
           </span>
         </div>

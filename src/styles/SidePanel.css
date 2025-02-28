@@ -92,7 +92,7 @@ body {
   width: calc(100%);
   right: 0;
   left: 0;
-  height: 18%;
+  height: 23%;
   box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
@@ -633,6 +633,18 @@ body {
 }
 
 .blob {
+  position: fixed;
+  width: calc(55vw);
+  height: calc(30vh);
+  box-shadow: inset 10px 10px 0px 10px #ee6bff, inset -14px -16px 0px 40px #ff6bce, inset 20px 9px 0px 200px #4befff;
+  mix-blend-mode: color-dodge;
+  -webkit-animation: move 25s infinite alternate;
+  animation: move 25s infinite alternate;
+  transition: 1s cubic-bezier(0.07, 0.8, 0.16, 1);
+  /* -webkit-filter: blur(15px); */
+  filter: blur(78px);
+}
+.blob2 {
   position: fixed;
   width: calc(55vw);
   height: calc(30vh);
