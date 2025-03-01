@@ -16,11 +16,17 @@ background: linear-gradient(180deg, #eef2f3 0%, hsla(229, 28%, 88%, 1) 100%);
 */
 
 body {
+  --background: #181a20;
+  --og-green: #00f9d3;
+  --switch-green: #55dccc;
+  --switch-green-fade: #55dcccc9;
+  --switch-pink: #ff00ff;
+
   box-sizing: border-box;
   height: calc(100vh);
   margin: 0;
   /* DARK */
-  background: #181a20;
+  background: var(--background);
   /* transition: all 2s ease-in-out; */
 }
 
@@ -96,7 +102,7 @@ body {
   box-sizing: border-box;
   padding-left: 16px;
   padding-right: 16px;
-  backdrop-filter: blur(30px);
+  /* backdrop-filter: blur(30px); */
 }
 
 .greeting-ptag {
@@ -247,7 +253,7 @@ body {
   margin-bottom: 10px;
   color: #f5f5f5;
   /* Background Animation */
-  background: linear-gradient(#181a20, #181a20), linear-gradient(90deg, transparent, rgb(177, 87, 255) 40%, rgb(255, 0, 191), #00ffff 60%, #ff00ff 70%, rgb(87, 241, 255) 80%, transparent 100%);
+  background: linear-gradient(#181a20, #181a20), linear-gradient(90deg, transparent, rgb(177, 87, 255) 40%, rgb(255, 0, 191), #00ffff 60%, #ff00ff 70%, #57f1ff 80%, transparent 100%);
   background-origin: border-box;
   background-clip: padding-box, border-box;
   background-size: 400% 400%;
@@ -339,13 +345,12 @@ body {
   display: flex;
   margin: 10px 0;
   height: 40px;
-  /* background-color: transparent; */
-  /* border-bottom: #d8d8d8; */
   width: 100%;
   border-radius: 8px;
   align-items: center;
   cursor: pointer;
-  position: relative; /* Add this */
+  position: relative;
+  background: transparent;
   /* border: 1px solid #00f9d3; */
   background: linear-gradient(#181a20, #181a20), linear-gradient(90deg, transparent, rgb(177, 87, 255) 40%, rgb(255, 0, 191), #00ffff 60%, #ff00ff 70%, rgb(87, 241, 255) 80%, transparent 100%);
   background-origin: border-box;
@@ -353,8 +358,9 @@ body {
   background-size: 400% 400%;
   animation: border-flow 6s ease-in-out infinite alternate;
   box-sizing: border-box;
-  border: 1px solid transparent;
   transition: box-shadow 0.4s ease-in-out, filter 0.4s ease-in-out, border-radius 0.4s ease-in-out;
+  border: 1px solid transparent;
+  background-color: transparent;
 }
 
 /* Outer Aura - Always Visible */
@@ -397,14 +403,14 @@ body {
 
 .sidepanel-tab {
   display: flex;
-  color: #f5f5f5;
+  /* color: #f5f5f5; */
+  color: #f5f5f585;
   font-weight: bold;
   font-size: 12px;
   width: 50%;
   height: 100%;
   align-items: center;
   justify-content: center;
-
   transition: all 0.3s ease-in-out;
 }
 
@@ -417,15 +423,19 @@ body {
 .tab-divider {
 }
 .sidepanel-tab:hover {
-  background-color: #00f9d34f;
+  background-color: #383838f2;
   color: #f5f5f5;
   /* border-radius: 8px; */
 }
 
 .selected_tab {
   background-color: #181a20;
-  /* background-color: #00f9d34f; */
-  color: #f5f5f5;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(90deg, white, rgb(177, 87, 255) 40%, rgb(255, 0, 191), #00ffff 60%, #ff00ff 70%, rgb(87, 241, 255) 80%, white 100%);
+  background-size: 400% 400%;
+  animation: border-flow 6s ease-in-out infinite alternate;
 }
 
 .sp-message-container {
@@ -636,25 +646,57 @@ body {
   position: fixed;
   width: calc(55vw);
   height: calc(30vh);
-  box-shadow: inset 10px 10px 0px 10px #ee6bff, inset -14px -16px 0px 40px #ff6bce, inset 20px 9px 0px 200px #4befff;
+  /* box-shadow: inset 10px 10px 0px 10px #6bfffa, inset -14px -16px 0px 40px #ff6bce, inset 20px 9px 0px 200px #79ffe8; */
+
+  /* before */
+  /* box-shadow: inset 10px 10px 0px 10px #ee6bff, inset -14px -16px 0px 40px #ff6bce, inset 20px 9px 0px 200px #4befff; */
   mix-blend-mode: color-dodge;
-  -webkit-animation: move 25s infinite alternate;
-  animation: move 25s infinite alternate;
-  transition: 1s cubic-bezier(0.07, 0.8, 0.16, 1);
   /* -webkit-filter: blur(15px); */
   filter: blur(78px);
+  transition: background 2s ease-in-out;
 }
-.blob2 {
-  position: fixed;
-  width: calc(55vw);
-  height: calc(30vh);
-  box-shadow: inset 10px 10px 0px 10px #ee6bff, inset -14px -16px 0px 40px #ff6bce, inset 20px 9px 0px 200px #4befff;
-  mix-blend-mode: color-dodge;
-  -webkit-animation: move 25s infinite alternate;
-  animation: move 25s infinite alternate;
-  transition: 1s cubic-bezier(0.07, 0.8, 0.16, 1);
-  /* -webkit-filter: blur(15px); */
-  filter: blur(78px);
+.blob::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 10px 10px 0px 10px #6bfffa, inset -14px -16px 0px 40px #ff6bce, inset 20px 9px 0px 200px #79ffe8;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  /* animation: move 25s infinite alternate; */
+}
+
+.blob::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 10px 10px 0px 10px #88fffb, inset -14px -16px 0px 40px #df6bff, inset 20px 9px 0px 200px #eb2f96;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  /* animation: move 25s infinite alternate; */
+}
+
+.blob.mode-focus::before {
+  opacity: 1;
+}
+
+.blob.mode-flow::after {
+  opacity: 1;
+}
+
+@keyframes move {
+  from {
+    border-radius: 24% 76% 35% 65% / 27% 36% 64% 73%;
+  }
+  to {
+    transform: translate(min(50%, 100vw - 300px), 100px) rotate(180deg);
+    border-radius: 76% 24% 33% 67% / 68% 55% 45% 32%;
+  }
 }
 
 /* @keyframes move {

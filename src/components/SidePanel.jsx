@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../styles/SidePanel.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik } from "formik";
 import { getEnhancedPromptThunk, streamEnhancedPromptThunk } from "../../store/features/prompt";
 import ReactMarkdown from "react-markdown";
 import cn from "classnames";
+// import "../styles/BracketHighlight.css";
+import BracketEditor from "./BracketEditor";
+
 // Ant Icons
 import {
   AppstoreOutlined,
@@ -42,6 +45,7 @@ const SidePanel = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   const frameworks = ["AIDA", "BAB", "PAS", "GRADE", "CREO", "FAB", "4C's", "PASTOR", "SCAMPER", "KISS", "Hero's Journey"];
+  const contentEditableRef = React.useRef(null);
 
   // Modal Handlers
   const showModal = () => {
@@ -129,7 +133,10 @@ const SidePanel = () => {
       <p>Content</p>
     </div>
   );
-
+  const handleInput = e => {
+    const content = e.currentTarget.innerText;
+    setPrompt(content);
+  };
   const handleEnhance = () => {
     if (!prompt) {
       alert("Please enter a prompt.");
@@ -168,8 +175,19 @@ const SidePanel = () => {
 
   useEffect(() => {
     let container = document.querySelector(".sidepanel-top");
+    let blob = document.querySelector(".blob");
 
-    promptModeSwitch ? (container.classList.add("mode-focus"), container.classList.remove("mode-flow")) : (container.classList.add("mode-flow"), container.classList.remove("mode-focus"));
+    if (promptModeSwitch) {
+      container.classList.add("mode-focus");
+      container.classList.remove("mode-flow");
+      blob.classList.add("mode-focus");
+      blob.classList.remove("mode-flow");
+    } else {
+      container.classList.add("mode-flow");
+      container.classList.remove("mode-focus");
+      blob.classList.add("mode-flow");
+      blob.classList.remove("mode-focus");
+    }
   }, [promptModeSwitch]);
 
   useEffect(() => {
@@ -193,16 +211,18 @@ const SidePanel = () => {
       }
     });
   }, [promptStream]);
+
   return (
     // Create. Refine. Dominate. Tagline for the tool
     <>
-      {/* <div className="gradient-overlay"> */}
-      <div className="blob"></div>
+      <div
+        className={cn("blob", {
+          blow_flow: promptModeSwitch === false,
+        })}
+      />
 
       <div className="sidepanel-container">
         <div className="sidepanel-top">
-          {/* <div className="blob2"></div> */}
-
           <div className="sidepanel-tabs">
             <div
               className={cn("sidepanel-tab spt-left", {
@@ -229,10 +249,7 @@ const SidePanel = () => {
                 <div className="greeting-span">Let’s craft the perfect prompt!</div>
               </>
             ) : (
-              <>
-                {/* <div className="greeting-ptag">Hey!</div>
-                <div className="greeting-span">What can I help you with today?</div> */}
-              </>
+              <></>
             )}
             {selectedTab === 1 && messages?.length === 0 ? (
               <>
@@ -276,16 +293,18 @@ const SidePanel = () => {
                 )}
                 <div className="toolbar-container">
                   <div className="toolbar-left">
-                    <Switch
-                      className={cn("prompt-mode-switch", {
-                        switch_on: promptModeSwitch,
-                        switch_off: !promptModeSwitch,
-                      })}
-                      checked={promptModeSwitch}
-                      onChange={setPromptModeSwitch}
-                      checkedChildren="Focus"
-                      unCheckedChildren="Flow"
-                    />
+                    {selectedTab == 0 && (
+                      <Switch
+                        className={cn("prompt-mode-switch", {
+                          switch_on: promptModeSwitch,
+                          switch_off: !promptModeSwitch,
+                        })}
+                        checked={promptModeSwitch}
+                        onChange={setPromptModeSwitch}
+                        checkedChildren="Focus"
+                        unCheckedChildren="Flow"
+                      />
+                    )}
                     {/* <Button
                   className="swap-chat-btn"
                   // className="advanced-options-btn"
@@ -330,9 +349,11 @@ const SidePanel = () => {
                     {/* <Button className="more-btn" type="filled" onClick={showModal}></Button> */}
                   </div>
                 </div>
-                <textarea
+
+                <BracketEditor selectedTab={selectedTab} />
+                {/* <textarea
                   name="prompt"
-                  placeholder={selectedTab === 0 ? "Enter your prompt here..." : "Type your message..."}
+                  placeholder={selectedTab === 0 ? "Type your Prompt" : "Ask Assistant"}
                   value={prompt}
                   onChange={e => {
                     console.log("this is the value:", e.target.value);
@@ -340,12 +361,13 @@ const SidePanel = () => {
                   }}
                   rows="5"
                   className="sidepanel-input"
-                />
+                /> */}
                 <button type="submit" disabled={loading} className="enhance-prompt-btn" />
               </form>
             )}
           </Formik>
         </div>
+        {/* <BracketHighlighter /> */}
       </div>
       {/* </div> */}
     </>
