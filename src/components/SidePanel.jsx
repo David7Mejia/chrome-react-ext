@@ -23,7 +23,10 @@ import {
 } from "@ant-design/icons";
 import { Modal, Button, Dropdown, Menu, Popover, Space, Switch } from "antd";
 
-const Message = ({ content, isUser }) => <div className={`message-bubble ${isUser ? "user-message" : "ai-message"}`}>{isUser ? content : <ReactMarkdown>{content}</ReactMarkdown>}</div>;
+const Message = ({ content, isUser }) => (
+<div className={`message-bubble ${isUser ? "user-message" : "ai-message"}`}>
+  {isUser ? content : <ReactMarkdown>{content}</ReactMarkdown>}
+  </div>);
 
 const SidePanel = () => {
   const dispatch = useDispatch();
@@ -165,7 +168,6 @@ const SidePanel = () => {
   //   if (promptStream) {
   //     setIsStreaming(true);
   //     try {
-
   //       setCurrentStream(JSON.parse(promptStream));
   //     } catch (e) {
   //       setCurrentStream(promptStream);
@@ -242,27 +244,36 @@ const SidePanel = () => {
               CHAT
             </div>
           </div>
-          <span className="greeting-span-container">
-            {selectedTab === 0 && messages?.length === 0 ? (
-              <>
-                <div className="greeting-ptag">Hey!</div>
-                <div className="greeting-span">Let’s craft the perfect prompt!</div>
-              </>
-            ) : (
-              <></>
-            )}
-            {selectedTab === 1 && messages?.length === 0 ? (
-              <>
-                <div className="greeting-ptag">Hey!</div>
-                <div className="greeting-span">What can I help you with today?</div>
-              </>
-            ) : (
-              <></>
-            )}
-          </span>
+          {messages?.length === 0 && (
+            <span className="greeting-span-container">
+              {/* <div className="blob-greeting"></div> */}
+              {selectedTab === 0 ? (
+                <>
+                  <div className="greeting-ptag">Hey!</div>
+
+                  <div className="greeting-span">Let’s craft the perfect prompt!</div>
+                  {promptModeSwitch ? <div className="greeting-span">Focus Mode: Iterate a Single Prompt</div> : <div className="greeting-span">Fast Mode: Quickly Enhance your Prompts.</div>}
+                </>
+              ) : (
+                <></>
+              )}
+              {selectedTab === 1 ? (
+                <>
+                  <div className="greeting-ptag">Hey!</div>
+                  <div className="greeting-span">What can I help you with today?</div>
+                </>
+              ) : (
+                <></>
+              )}
+            </span>
+          )}
         </div>
 
-        <div className="sp-message-container">
+        <div
+          className={cn("sp-message-container", {
+            sp_container_margin: messages.length > 0,
+          })}
+        >
           <div className="chat-container">
             {messages.map((msg, index) => (
               <Message key={index} content={msg.content} isUser={msg.isUser} />
@@ -302,7 +313,7 @@ const SidePanel = () => {
                         checked={promptModeSwitch}
                         onChange={setPromptModeSwitch}
                         checkedChildren="Focus"
-                        unCheckedChildren="Flow"
+                        unCheckedChildren="Fast"
                       />
                     )}
                     {/* <Button
@@ -350,7 +361,7 @@ const SidePanel = () => {
                   </div>
                 </div>
 
-                <BracketEditor selectedTab={selectedTab} />
+                <BracketEditor selectedTab={selectedTab} prompt={prompt} setPrompt={setPrompt} />
                 {/* <textarea
                   name="prompt"
                   placeholder={selectedTab === 0 ? "Type your Prompt" : "Ask Assistant"}

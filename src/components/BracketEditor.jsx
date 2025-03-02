@@ -24,7 +24,7 @@ function bracketHighlighterPlugin() {
             const end = start + match[0].length;
             decos.push(
               Decoration.inline(start, end, {
-                style: "color: red; font-weight: bold;",
+                style: "color: #00ffff;",
               })
             );
           }
@@ -62,42 +62,51 @@ function placeholderPlugin(placeholderText) {
   });
 }
 
-export default function BracketEditor({ selectedTab }) {
+export default function BracketEditor({ selectedTab, prompt, setPrompt }) {
   const editorRef = useRef(null);
   const pmViewRef = useRef(null);
 
-  // useEffect(() => {}, [selectedTab]);
   useEffect(() => {
-    // Confirm our ref is in DOM
     if (!editorRef.current) return;
 
-    // Construct initial EditorState
     const editorState = EditorState.create({
       schema: basicSchema,
+      doc: basicSchema.node("doc", null, [basicSchema.node("paragraph", null, prompt ? [basicSchema.text(prompt)] : null)]),
       plugins: [history(), keymap(baseKeymap), bracketHighlighterPlugin(), placeholderPlugin(selectedTab === 0 ? "Type your Prompt" : "Ask Assistant")],
     });
 
-    // Create EditorView
     const view = new EditorView(editorRef.current, {
       state: editorState,
       dispatchTransaction(tr) {
-        // Apply transaction
         const newState = view.state.apply(tr);
         view.updateState(newState);
+
+        // Get text content after each transaction
+        if (tr.docChanged) {
+          const content = newState.doc.textContent;
+          setPrompt(content);
+        }
       },
     });
 
     pmViewRef.current = view;
 
-    // Cleanup on unmount
     return () => {
       view.destroy();
     };
-  }, [selectedTab]);
+  }, [selectedTab, prompt, setPrompt]);
+
+  // Update editor content when prompt changes externally
+  useEffect(() => {
+    if (pmViewRef.current && prompt !== pmViewRef.current.state.doc.textContent) {
+      const tr = pmViewRef.current.state.tr.replaceWith(0, pmViewRef.current.state.doc.content.size, prompt ? [basicSchema.text(prompt)] : []);
+      pmViewRef.current.dispatch(tr);
+    }
+  }, [prompt]);
 
   return (
     <div className="gradient-border-wrapper">
-      <div className="pm-editor-container" ref={editorRef} placeholder="hello" />
+      <div className="pm-editor-container" ref={editorRef} placeholder="" />
     </div>
   );
 }

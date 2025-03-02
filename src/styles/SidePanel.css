@@ -14,13 +14,18 @@ background: linear-gradient(180deg, #eef2f3 0%, hsla(229, 28%, 88%, 1) 100%);
  background: #f5f5f5;
  #080411
 */
-
+* {
+  box-sizing: border-box;
+}
 body {
   --background: #181a20;
   --og-green: #00f9d3;
   --switch-green: #55dccc;
   --switch-green-fade: #55dcccc9;
   --switch-pink: #ff00ff;
+  --light-font: #dcdff9;
+  --white: #f5f5f5;
+  --sea-blue: #18d3d;
 
   box-sizing: border-box;
   height: calc(100vh);
@@ -86,6 +91,7 @@ body {
 }
 
 .sidepanel-top {
+  z-index: 500;
   padding-top: 1rem;
   margin-bottom: auto; /* Pushes this content to the top */
   display: flex;
@@ -96,12 +102,11 @@ body {
   position: fixed;
   top: 0;
   width: calc(100%);
-  right: 0;
-  left: 0;
+  /* right: 0;
+  left: 0; */
   height: 23%;
   box-sizing: border-box;
-  padding-left: 16px;
-  padding-right: 16px;
+  width: calc(100% - 32px);
   /* backdrop-filter: blur(30px); */
 }
 
@@ -128,14 +133,25 @@ body {
   /* color: #666; */
 
   /* DARK */
-  color: #f5f5f5;
+  /* color: #f5f5f5; */
+  color: #282828;
 }
 .greeting-span-container {
+  overflow: hidden;
   align-self: flex-start;
   font-size: 24px;
 
   /* DARK */
-  color: #f5f5f5;
+  color: #282828;
+
+  padding: 1rem;
+  border-radius: 5px 20px;
+  /* backdrop-filter: blur(24px); */
+  width: 100%;
+  /* border: 1px solid #d9d9d961; */
+  /* background: linear-gradient(45deg, #2ee4ae, #18d3d6); */
+  background: #fafafa;
+  color: #181a20;
 }
 
 .chatbox-area {
@@ -151,11 +167,12 @@ body {
   bottom: 0;
   position: fixed;
   background-color: #181a20;
-  width: calc(100% - 32px);
+  width: 100%;
   right: 0;
   left: 0;
   padding-left: 16px;
   padding-right: 16px;
+  z-index: 500;
   /* margin-top: 2rem; */
   /* padding-bottom: 1rem; */
 }
@@ -430,21 +447,25 @@ body {
 
 .selected_tab {
   background-color: #181a20;
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-  background-image: linear-gradient(90deg, white, rgb(177, 87, 255) 40%, rgb(255, 0, 191), #00ffff 60%, #ff00ff 70%, rgb(87, 241, 255) 80%, white 100%);
-  background-size: 400% 400%;
+  /* color: transparent; */
+  color: var(--white);
+  /* background-clip: text; */
+  /* -webkit-background-clip: text; */
+  /* background-image: linear-gradient(90deg, white, rgb(177, 87, 255) 40%, rgb(255, 0, 191), #00ffff 60%, #ff00ff 70%, rgb(87, 241, 255) 80%, white 100%); */
+  /* background-size: 400% 400%; */
   animation: border-flow 6s ease-in-out infinite alternate;
 }
 
 .sp-message-container {
-  color: #dcdff9eb;
+  color: var(--light-font);
   font-size: 14px;
   margin-top: calc(18vh); /* 23vh for sidepanel-top height + 40px for tabs/controls */
   padding-bottom: 170px;
   /* position: relative; */
   /* z-index: 1; */
+}
+.sp_container_margin {
+  margin-top: 85px;
 }
 
 .chat-bubble {
@@ -531,15 +552,19 @@ body {
 
 .ai-message {
   margin: 0;
+  border: 1px solid #ffffff33;
   /* margin-right: auto; */
-  padding: 0 !important;
   margin-inline-end: 40px;
+  padding: 12px;
+  background: linear-gradient(180deg, rgba(24, 26, 32, 1) 39%, rgba(24, 26, 32, 0.8) 100%);
 }
 
 .chat-container {
+  margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  row-gap: 1.5rem;
 }
 
 /* ADVANCED BUTTON  */
@@ -566,6 +591,13 @@ body {
 
   color: #55dccc;
 }
+
+.new-prompt-btn:hover {
+  border: 1px solid #55dccc6e !important;
+  background-color: #55dccc33 !important;
+  color: #55dccc !important;
+}
+
 .advanced-options-popover {
   color: white;
 }
@@ -699,13 +731,43 @@ body {
   }
 }
 
-/* @keyframes move {
+.blob-greeting {
+  /* position: fixed; */
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 10px 10px 0px 10px #6bfffa, inset -14px -16px 0px 40px #ff6bce, inset 20px 9px 0px 200px #79ffe8;
+
+  /* before */
+  /* box-shadow: inset 10px 10px 0px 10px #ee6bff, inset -14px -16px 0px 40px #ff6bce, inset 20px 9px 0px 200px #4befff; */
+  mix-blend-mode: color-dodge;
+  /* -webkit-filter: blur(15px); */
+  filter: blur(78px);
+  transition: move 2s ease-in-out infinite;
+  animation: move 25s infinite alternate;
+}
+@keyframes move {
   from {
     border-radius: 24% 76% 35% 65% / 27% 36% 64% 73%;
   }
 
   to {
-    transform: translate(min(50%, 100vw - 300px), 100px) rotate(180deg);
+    transform: translate(min(50%, 100vw - 300px), min(50%, 100vw - 300px)) rotate(180deg);
+    border-radius: 76% 24% 33% 67% / 68% 55% 45% 32%;
+  }
+}
+/*
+
+.blob-greeting2 {
+    width: 250px;
+    height: 250px;
+    box-shadow: inset 0px 41px 10px 15px #6b81ff, inset 0 20px 10px 27px #21ffe3, inset 0 0 10px 81px #f463ff;
+}
+@keyframes move2 {
+  0% {
+    border-radius: 24% 76% 35% 65% / 27% 36% 64% 73%;
+  }
+  100% {
+    transform: translate(13%, -29%) rotate(180deg);
     border-radius: 76% 24% 33% 67% / 68% 55% 45% 32%;
   }
 } */
