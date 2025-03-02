@@ -3,9 +3,6 @@ import { createRoot } from "react-dom/client";
 import "./contentScript.css";
 import cn from "classnames";
 
-// Load bubble image from extension
-const imageUrl = chrome.runtime.getURL("nodes_nbg_dark.svg");
-
 // Input detection constants
 const INPUT_SELECTORS = {
   textarea: "textarea, #prompt-textarea",
@@ -13,6 +10,83 @@ const INPUT_SELECTORS = {
   placeholder: "[data-placeholder]",
 };
 
+//! START ZONE
+const PLATFORM_CONFIGS = {
+  chatgpt: {
+    domain: "chatgpt.com",
+    buttonSelector: 'button[aria-label="Send prompt"],button[aria-label="Start voice mode"], button[aria-label="Start voice input"], button[aria-label="Stop streaming"]',
+    containerSelector: 'div[class*="flex"][class*="items-center"]',
+    textareaSelector: "textarea",
+    dynamicButtonCheck: false,
+  },
+  claude: {
+    domain: "claude.ai",
+    buttonSelector: 'button[type="submit"], button[aria-label="Upload content"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: false,
+  },
+  gemini: {
+    domain: "gemini.google.com",
+    buttonSelector: 'button[aria-label*="send message"],button[aria-label*="Microphone"], button[class*="hidden"]',
+    containerSelector: 'div[class*="send-button-container"],[class*="input-buttons-wrapper-bottom"]',
+    textareaSelector: "div[class*='input-area']",
+    dynamicButtonCheck: false,
+    isGemini: false,
+  },
+  perplexity: {
+    domain: "perplexity.ai",
+    buttonSelector: 'button[type="Submit"], button[aria-label="Submit"], button[class*="text-textOff"], button[class*="text-white"]',
+    containerSelector: 'div[class*="flex"][class*="items-center"]',
+    textareaSelector: "textarea",
+    dynamicButtonCheck: true,
+  },
+  copilot: {
+    domain: "copilot.microsoft.com",
+    buttonSelector: 'button[aria-label*="Talk to Copilot"], button[aria-label="Submit message"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: 'textarea[placeholder*="Enter a message"], textarea.copilot-textarea',
+    dynamicButtonCheck: true,
+  },
+  notebookllm: {
+    domain: "notebooklm.google.com",
+    buttonSelector: 'button[aria-label*="Submit"], button[disabled="true"], button[class*="submit-button"]',
+    containerSelector: 'div[class*="input-group"]',
+    textareaSelector: 'textarea[aria-label*="Query box"]',
+    dynamicButtonCheck: true,
+  },
+  sora: {
+    domain: "sora.com",
+    buttonSelector: 'button[type="submit"], button[data-disabled="false"], button[data-disabled="true"]',
+    containerSelector: 'div[class*="flex"], [class*="items-center"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: true,
+  },
+  grok: {
+    domain: "x.com",
+    buttonSelector: 'button[aria-label="Grok something"], button[aria-label="Cancel"], button[aria-disabled="true"]',
+    containerSelector: 'div[class*="css-175oi2r"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: false,
+  },
+  deepseek: {
+    domain: "chat.deepseek.com",
+    buttonSelector: 'div[class*="f6d670"], div[class*="bcc55ca1"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: "textarea",
+    dynamicButtonCheck: false,
+  },
+};
+const getCurrentPlatform = () => {
+  const host = window.location.hostname;
+  const found = Object.entries(PLATFORM_CONFIGS).find(([key, cfg]) => cfg.domain.split(".").every(part => host.includes(part)));
+  return found ? found[0] : null;
+};
+
+//! END ZONE
+
+// Load bubble image from extension
+const imageUrl = chrome.runtime.getURL("nodes_nbg_dark.svg");
 // Bubble Component
 const Bubble = () => {
   const handleClick = () => {

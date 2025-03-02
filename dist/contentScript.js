@@ -27978,9 +27978,6 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 
 
 
-// Load bubble image from extension
-var imageUrl = chrome.runtime.getURL("nodes_nbg_dark.svg");
-
 // Input detection constants
 var INPUT_SELECTORS = {
   textarea: "textarea, #prompt-textarea",
@@ -27988,6 +27985,90 @@ var INPUT_SELECTORS = {
   placeholder: "[data-placeholder]"
 };
 
+//! START ZONE
+var PLATFORM_CONFIGS = {
+  chatgpt: {
+    domain: "chatgpt.com",
+    buttonSelector: 'button[aria-label="Send prompt"],button[aria-label="Start voice mode"], button[aria-label="Start voice input"], button[aria-label="Stop streaming"]',
+    containerSelector: 'div[class*="flex"][class*="items-center"]',
+    textareaSelector: "textarea",
+    dynamicButtonCheck: false
+  },
+  claude: {
+    domain: "claude.ai",
+    buttonSelector: 'button[type="submit"], button[aria-label="Upload content"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: false
+  },
+  gemini: {
+    domain: "gemini.google.com",
+    buttonSelector: 'button[aria-label*="send message"],button[aria-label*="Microphone"], button[class*="hidden"]',
+    containerSelector: 'div[class*="send-button-container"],[class*="input-buttons-wrapper-bottom"]',
+    textareaSelector: "div[class*='input-area']",
+    dynamicButtonCheck: false,
+    isGemini: false
+  },
+  perplexity: {
+    domain: "perplexity.ai",
+    buttonSelector: 'button[type="Submit"], button[aria-label="Submit"], button[class*="text-textOff"], button[class*="text-white"]',
+    containerSelector: 'div[class*="flex"][class*="items-center"]',
+    textareaSelector: "textarea",
+    dynamicButtonCheck: true
+  },
+  copilot: {
+    domain: "copilot.microsoft.com",
+    buttonSelector: 'button[aria-label*="Talk to Copilot"], button[aria-label="Submit message"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: 'textarea[placeholder*="Enter a message"], textarea.copilot-textarea',
+    dynamicButtonCheck: true
+  },
+  notebookllm: {
+    domain: "notebooklm.google.com",
+    buttonSelector: 'button[aria-label*="Submit"], button[disabled="true"], button[class*="submit-button"]',
+    containerSelector: 'div[class*="input-group"]',
+    textareaSelector: 'textarea[aria-label*="Query box"]',
+    dynamicButtonCheck: true
+  },
+  sora: {
+    domain: "sora.com",
+    buttonSelector: 'button[type="submit"], button[data-disabled="false"], button[data-disabled="true"]',
+    containerSelector: 'div[class*="flex"], [class*="items-center"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: true
+  },
+  grok: {
+    domain: "x.com",
+    buttonSelector: 'button[aria-label="Grok something"], button[aria-label="Cancel"], button[aria-disabled="true"]',
+    containerSelector: 'div[class*="css-175oi2r"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: false
+  },
+  deepseek: {
+    domain: "chat.deepseek.com",
+    buttonSelector: 'div[class*="f6d670"], div[class*="bcc55ca1"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: "textarea",
+    dynamicButtonCheck: false
+  }
+};
+var getCurrentPlatform = function getCurrentPlatform() {
+  var host = window.location.hostname;
+  var found = Object.entries(PLATFORM_CONFIGS).find(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+      key = _ref2[0],
+      cfg = _ref2[1];
+    return cfg.domain.split(".").every(function (part) {
+      return host.includes(part);
+    });
+  });
+  return found ? found[0] : null;
+};
+
+//! END ZONE
+
+// Load bubble image from extension
+var imageUrl = chrome.runtime.getURL("nodes_nbg_dark.svg");
 // Bubble Component
 var Bubble = function Bubble() {
   var handleClick = function handleClick() {

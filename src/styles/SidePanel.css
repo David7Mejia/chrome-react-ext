@@ -543,7 +543,7 @@ body {
 
 .user-message {
   margin: 8px 0;
-  background-color: #f1f1f1;
+  background-color: var(--light-font);
   border-bottom-right-radius: 4px;
   align-self: flex-end;
   margin-inline-start: 22px;
@@ -552,7 +552,13 @@ body {
 
 .ai-message {
   margin: 0;
-  border: 1px solid #ffffff33;
+  border: 1px solid #00cbff5e;
+
+  /* border: 1px solid #ffffff33; */
+  /* #ff00ff40 purple
+  00cbff5e blue
+  */
+
   /* margin-right: auto; */
   margin-inline-end: 40px;
   padding: 12px;
@@ -678,6 +684,8 @@ body {
   position: fixed;
   width: calc(55vw);
   height: calc(30vh);
+  max-height: 222px;
+  max-width: 200px;
   /* box-shadow: inset 10px 10px 0px 10px #6bfffa, inset -14px -16px 0px 40px #ff6bce, inset 20px 9px 0px 200px #79ffe8; */
 
   /* before */

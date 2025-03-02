@@ -24,7 +24,7 @@ function bracketHighlighterPlugin() {
             const end = start + match[0].length;
             decos.push(
               Decoration.inline(start, end, {
-                style: "color: #00ffff;",
+                class: "bracket-highlight",
               })
             );
           }
