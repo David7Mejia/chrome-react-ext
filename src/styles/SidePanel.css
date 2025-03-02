@@ -137,7 +137,7 @@ body {
   color: #282828;
 }
 .greeting-span-container {
-  overflow: hidden;
+  /* overflow: hidden; */
   align-self: flex-start;
   font-size: 24px;
 
@@ -362,6 +362,7 @@ body {
   display: flex;
   margin: 10px 0;
   height: 40px;
+  min-height: 40px;
   width: 100%;
   border-radius: 8px;
   align-items: center;
