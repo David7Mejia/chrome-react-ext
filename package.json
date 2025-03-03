@@ -1,25 +1,47 @@
 {
   "devDependencies": {
-    "@types/chrome": "^0.0.287",
-    "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.1",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
+    "@redux-devtools/extension": "^3.3.0",
+    "babel-loader": "^9.2.1",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^7.1.2",
     "html-webpack-plugin": "^5.6.3",
+    "mini-css-extract-plugin": "^2.9.2",
+    "remotedev": "^0.2.9",
+    "sass": "^1.83.0",
     "style-loader": "^4.0.0",
-    "typescript": "^5.7.2",
     "webpack-cli": "^5.1.4",
     "webpack-merge": "^6.0.1"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.6.1",
+    "@reduxjs/toolkit": "^2.5.0",
+    "antd": "^5.23.3",
+    "classnames": "^2.5.1",
+    "formik": "^2.4.6",
+    "prosemirror-commands": "^1.7.0",
+    "prosemirror-history": "^1.4.1",
+    "prosemirror-keymap": "^1.2.2",
+    "prosemirror-model": "^1.24.1",
+    "prosemirror-schema-basic": "^1.2.3",
+    "prosemirror-schema-list": "^1.5.0",
+    "prosemirror-state": "^1.4.3",
+    "prosemirror-view": "^1.38.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "ts-loader": "^9.5.1",
+    "react-markdown": "^9.0.3",
+    "react-redux": "^9.2.0",
+    "redux": "^5.0.1",
+    "redux-thunk": "^3.1.0",
+    "remote-redux-devtools": "^0.5.16",
+    "webext-redux": "^4.0.0",
     "webpack": "^5.97.1"
   },
   "scripts": {
     "start": "webpack --watch --progress --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js",
+    "scss": "sass --watch src/styles:src/styles --style expanded"
   }
 }
