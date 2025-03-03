@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { streamEnhancedPromptThunk } from "../../../store/features/prompt";
-import {useDispatch} from 'react-redux'
+import { useDispatch } from "react-redux";
 /**
  * PLATFORM_CONFIGS would be whatever you have for:
  *   - domain, buttonSelector, containerSelector, textareaSelector, dynamicButtonCheck
@@ -206,7 +206,7 @@ const positionButton = () => {
 };
 
 /** Actually create the <button> & inject it into the DOM. Similar to “addButton()” in prompt-enhancer.js */
-function createEnhanceButton(container, textInput, platform) {
+function createEnhanceButton(container, textInput, platform, onEnhance) {
   removeEnhanceButton(); // ensure old one is gone
   const imageUrl = chrome.runtime.getURL("brain-logo.svg");
   const BUTTON_STYLES = {
@@ -243,7 +243,7 @@ function createEnhanceButton(container, textInput, platform) {
   // On click, do the “enhance” logic
   btn.addEventListener("click", evt => {
     evt.stopPropagation();
-    handleEnhancePrompt(textInput);
+    onEnhance(textInput);
   });
 
   // Add hover effects via event listeners
@@ -352,9 +352,90 @@ async function handleEnhancePrompt(textInput) {
   }
 }
 
+async function extractPromptContent(textInput) {
+  let content = "";
+
+  try {
+    // Handle different types of input fields
+    if (textInput.isContentEditable) {
+      content = textInput.textContent || textInput.innerText;
+    } else if (textInput.value !== undefined) {
+      content = textInput.value;
+    } else if (textInput.querySelector) {
+      // For complex elements that might contain the text in child nodes
+      const innerTextElement = textInput.querySelector("[contenteditable='true']") || textInput.querySelector("textarea") || textInput.querySelector("input");
+      if (innerTextElement) {
+        content = innerTextElement.value || innerTextElement.textContent || innerTextElement.innerText;
+      } else {
+        // Last resort - try to get any text content
+        content = textInput.textContent || textInput.innerText;
+      }
+    }
+
+    // For Gemini which may have a different structure
+    if (!content && getCurrentPlatform() === "gemini") {
+      const inputArea = document.querySelector("div[class*='input-area']");
+      if (inputArea) {
+        content = inputArea.textContent || inputArea.innerText;
+      }
+    }
+
+    content = content?.trim();
+    console.log("Content found:", content ? content.substring(0, 50) + "..." : "None");
+  } catch (error) {
+    console.error("Error extracting content:", error);
+  }
+
+  return content;
+}
+
 /** LLMEnhanceButton React component: sets up watchers for the text area on recognized domains. */
 const EnhanceBtn = () => {
   const platformRef = useRef(getCurrentPlatform() || null);
+  const dispatch = useDispatch();
+  const [currentTextInput, setCurrentTextInput] = useState(null);
+
+  // Memoize the function to prevent rerenders
+  const handleEnhance = useCallback(
+    async textInput => {
+      // Extract content
+      const content = await extractPromptContent(textInput);
+
+      if (!content) {
+        console.log("No content to enhance");
+        return;
+      }
+
+      // Check for JWT token
+      const storage = await new Promise(resolve => {
+        chrome.storage.local.get("sessionState", res => {
+          resolve(res.sessionState);
+        });
+      });
+
+      if (!storage?.jwtToken) {
+        console.log("No token => show login modal");
+        // showLoginModal()
+        return;
+      }
+
+      // Now dispatch directly from the React component
+      try {
+        console.log("Dispatching streamEnhancedPromptThunk with:", content);
+
+        // Direct dispatch - no messaging needed
+        dispatch(
+          streamEnhancedPromptThunk({
+            prompt: content,
+            framework: "", // You may want to add framework selection
+          })
+        );
+      } catch (err) {
+        console.error("Enhance dispatch failed:", err);
+      }
+    },
+    [dispatch]
+  ); // Only re-create if dispatch changes
 
   useEffect(() => {
     // If not recognized domain, do nothing
@@ -375,9 +456,12 @@ const EnhanceBtn = () => {
       const container = findPlatformButtonDiv(textArea);
       if (!container) return;
 
-      // If no button yet, create it
+      // Save reference to current text input
+      setCurrentTextInput(textArea);
+
+      // If no button yet, create it with the callback to our React component's handler
       if (!document.getElementById("pk_prompt_btn")) {
-        createEnhanceButton(container, textArea, platform);
+        createEnhanceButton(container, textArea, platform, handleEnhance);
       } else {
         // or re-position existing
         positionButton();
@@ -386,21 +470,23 @@ const EnhanceBtn = () => {
 
     checkAndAddButton();
 
-    // set up a MutationObserver for entire body (like prompt-enhancer.js) to re-check
+    // set up a MutationObserver for entire body
     const observer = new MutationObserver(() => {
       checkAndAddButton();
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // Also a focusin listener:
+    // Also a focusin listener
     function handleFocusIn(evt) {
       const target = evt.target;
       if (!target) return;
-      // If the user focuses the recognized text area => add the button
+
       if (target.matches(cfg.textareaSelector) || target.isContentEditable) {
         const container = findPlatformButtonDiv(target);
         if (container && !document.getElementById("pk_prompt_btn")) {
-          createEnhanceButton(container, target, platform);
+          // Save reference and create button
+          setCurrentTextInput(target);
+          createEnhanceButton(container, target, platform, handleEnhance);
         }
       }
     }
@@ -414,9 +500,8 @@ const EnhanceBtn = () => {
       window.removeEventListener("resize", positionButton, true);
       removeEnhanceButton();
     };
-  }, []);
+  }, [handleEnhance]); // We would need to memoize handleEnhance to avoid infinite loops
 
-  // This component doesn't visibly render anything itself – it just runs in the background to manage the button.
   return null;
 };
 
