@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import "../styles/SidePanel.css";
+import "./SidePanel.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik } from "formik";
-import { getEnhancedPromptThunk, streamEnhancedPromptThunk } from "../../store/features/prompt";
+import { getEnhancedPromptThunk, streamEnhancedPromptThunk } from "../../../store/features/prompt";
 import ReactMarkdown from "react-markdown";
 import cn from "classnames";
 // import "../styles/BracketHighlight.css";
-import BracketEditor from "./BracketEditor";
+import BracketEditor from "../BracketEditor";
 
 // Ant Icons
 import {
@@ -163,17 +163,6 @@ const SidePanel = () => {
     setPrompt("");
     dispatch(clearChatId());
   };
-
-  // useEffect(() => {
-  //   if (promptStream) {
-  //     setIsStreaming(true);
-  //     try {
-  //       setCurrentStream(JSON.parse(promptStream));
-  //     } catch (e) {
-  //       setCurrentStream(promptStream);
-  //     }
-  //   }
-  // }, [promptStream]);
 
   useEffect(() => {
     let container = document.querySelector(".sidepanel-top");

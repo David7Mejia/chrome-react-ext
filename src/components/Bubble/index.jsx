@@ -1,5 +1,5 @@
 import React from "react";
-import "./bubble.css";
+import "./Bubble.css";
 // Load bubble image from extension
 const imageUrl = chrome.runtime.getURL("brain-logo.svg");
 // Bubble Component

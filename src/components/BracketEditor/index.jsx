@@ -6,7 +6,7 @@ import { schema as basicSchema } from "prosemirror-schema-basic";
 import { history } from "prosemirror-history";
 import { baseKeymap } from "prosemirror-commands";
 import { keymap } from "prosemirror-keymap";
-import "../styles/BracketEditor.css";
+import "./BracketEditor.css";
 
 function bracketHighlighterPlugin() {
   return new Plugin({

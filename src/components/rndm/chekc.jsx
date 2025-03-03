@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/SidePanel.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik } from "formik";
-import { getEnhancedPromptThunk, streamEnhancedPromptThunk } from "../../store/features/prompt";
+import { getEnhancedPromptThunk, streamEnhancedPromptThunk } from "../../../store/features/prompt";
 import ReactMarkdown from "react-markdown";
 import cn from "classnames";
 

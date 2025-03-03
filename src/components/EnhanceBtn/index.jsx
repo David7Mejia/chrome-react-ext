@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
-
+import { streamEnhancedPromptThunk } from "../../../store/features/prompt";
+import {useDispatch} from 'react-redux'
 /**
  * PLATFORM_CONFIGS would be whatever you have for:
  *   - domain, buttonSelector, containerSelector, textareaSelector, dynamicButtonCheck
@@ -274,41 +275,80 @@ function createEnhanceButton(container, textInput, platform) {
   window.addEventListener("resize", positionButton, true);
 }
 
-/** The actual “enhance” logic - “handleEnhancePrompt” from the reference. */
+/** The actual "enhance" logic - "handleEnhancePrompt" from the reference. */
 async function handleEnhancePrompt(textInput) {
-  // example: read from textInput (textarea or contentEditable)
+  // More robust content extraction from various input types
   let content = "";
-  if (textInput.isContentEditable) content = textInput.textContent;
-  else content = textInput.value;
 
-  content = content?.trim();
+  try {
+    // Handle different types of input fields
+    if (textInput.isContentEditable) {
+      content = textInput.textContent || textInput.innerText;
+    } else if (textInput.value !== undefined) {
+      content = textInput.value;
+    } else if (textInput.querySelector) {
+      // For complex elements that might contain the text in child nodes
+      const innerTextElement = textInput.querySelector("[contenteditable='true']") || textInput.querySelector("textarea") || textInput.querySelector("input");
+      if (innerTextElement) {
+        content = innerTextElement.value || innerTextElement.textContent || innerTextElement.innerText;
+      } else {
+        // Last resort - try to get any text content
+        content = textInput.textContent || textInput.innerText;
+      }
+    }
+
+    // For Gemini which may have a different structure
+    if (!content && getCurrentPlatform() === "gemini") {
+      const inputArea = document.querySelector("div[class*='input-area']");
+      if (inputArea) {
+        content = inputArea.textContent || inputArea.innerText;
+      }
+    }
+
+    content = content?.trim();
+    console.log("Content found:", content ? content.substring(0, 50) + "..." : "None");
+  } catch (error) {
+    console.error("Error extracting content:", error);
+  }
+
   if (!content) {
     console.log("No content to enhance");
     return;
   }
+
   // check if user is logged in (just a dummy check)
   const storage = await new Promise(resolve => {
     chrome.storage.local.get("sessionState", res => {
       resolve(res.sessionState);
     });
   });
+
   if (!storage?.jwtToken) {
     console.log("No token => show login modal");
     // showLoginModal()
     return;
   }
 
-  // otherwise call your backend
+  // Dispatch the same action used in SidePanel component
   try {
-    console.log("Enhancing prompt:", content);
-    // Example fetch:
-    // const resp = await fetch("https://api.promptimizeai.com/api/content/enhance/", { ... })
-    // if (!resp.ok) { showTryLaterModal() ... }
-    // let data = await resp.json()
-    // do bracket highlighting, etc.
+    console.log("Enhancing prompt via Redux:", content);
+
+    // Create a chrome runtime message to send to the background script
+    chrome.runtime.sendMessage(
+      {
+        type: "DISPATCH_REDUX_ACTION",
+        payload: {
+          action: "streamEnhancedPrompt",
+          content: content,
+          framework: "", // You may want to add framework selection
+        },
+      },
+      response => {
+        console.log("Action dispatched response:", response);
+      }
+    );
   } catch (err) {
     console.error("Enhance failed:", err);
-    // showTryLaterModal()
   }
 }
 
