@@ -20,7 +20,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["icon.png", "promptking.png", "nodes.svg", "f5b5c50e1991f79f8733.svg", "6bcffb56bd0efaa47767.png", "nodes_nbg_dark.svg"],
+      "resources": ["icon.png", "promptking.png", "nodes.svg", "f5b5c50e1991f79f8733.svg", "6bcffb56bd0efaa47767.png", "nodes_nbg_dark.svg", "brain-logo.svg"],
       "matches": ["<all_urls>"]
     }
   ],

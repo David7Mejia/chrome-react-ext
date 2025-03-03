@@ -1,10 +1,484 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./node_modules/css-loader/dist/cjs.js!./src/contentScript/contentScript.css":
-/*!***********************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js!./src/contentScript/contentScript.css ***!
-  \***********************************************************************************/
+/***/ "./src/components/Bubble/index.jsx":
+/*!*****************************************!*\
+  !*** ./src/components/Bubble/index.jsx ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _bubble_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./bubble.css */ "./src/components/Bubble/bubble.css");
+
+
+// Load bubble image from extension
+var imageUrl = chrome.runtime.getURL("brain-logo.svg");
+// Bubble Component
+var Bubble = function Bubble() {
+  var handleClick = function handleClick() {
+    chrome.runtime.sendMessage({
+      type: "openSidePanel"
+    }, function (response) {
+      console.log("Background response:", response);
+    });
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "bubble-boy",
+    onClick: handleClick
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "nodes-svg",
+    style: {
+      backgroundImage: "url(".concat(imageUrl, ")")
+    }
+  }));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Bubble);
+
+/***/ }),
+
+/***/ "./src/components/EnhanceBtn/index.jsx":
+/*!*********************************************!*\
+  !*** ./src/components/EnhanceBtn/index.jsx ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
+
+/**
+ * PLATFORM_CONFIGS would be whatever you have for:
+ *   - domain, buttonSelector, containerSelector, textareaSelector, dynamicButtonCheck
+ * For brevity, here's an example (shortened).
+ */
+var PLATFORM_CONFIGS = {
+  chatgpt: {
+    domain: "chatgpt.com",
+    buttonSelector: 'button[aria-label="Send prompt"],button[aria-label="Start voice mode"], button[aria-label="Start voice input"], button[aria-label="Stop streaming"]',
+    containerSelector: 'div[class*="flex"][class*="items-center"]',
+    textareaSelector: "textarea",
+    dynamicButtonCheck: false
+  },
+  claude: {
+    domain: "claude.ai",
+    buttonSelector: 'button[type="submit"], button[aria-label="Upload content"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: false
+  },
+  gemini: {
+    domain: "gemini.google.com",
+    buttonSelector: 'button[aria-label*="send message"],button[aria-label*="Microphone"], button[class*="hidden"]',
+    containerSelector: 'div[class*="send-button-container"],[class*="input-buttons-wrapper-bottom"]',
+    textareaSelector: "div[class*='input-area']",
+    dynamicButtonCheck: false,
+    isGemini: false
+  },
+  perplexity: {
+    domain: "perplexity.ai",
+    buttonSelector: 'button[type="Submit"], button[aria-label="Submit"], button[class*="text-textOff"], button[class*="text-white"]',
+    containerSelector: 'div[class*="flex"][class*="items-center"]',
+    textareaSelector: "textarea",
+    dynamicButtonCheck: true
+  },
+  copilot: {
+    domain: "copilot.microsoft.com",
+    buttonSelector: 'button[aria-label*="Talk to Copilot"], button[aria-label="Submit message"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: 'textarea[placeholder*="Enter a message"], textarea.copilot-textarea',
+    dynamicButtonCheck: true
+  },
+  notebookllm: {
+    domain: "notebooklm.google.com",
+    buttonSelector: 'button[aria-label*="Submit"], button[disabled="true"], button[class*="submit-button"]',
+    containerSelector: 'div[class*="input-group"]',
+    textareaSelector: 'textarea[aria-label*="Query box"]',
+    dynamicButtonCheck: true
+  },
+  sora: {
+    domain: "sora.com",
+    buttonSelector: 'button[type="submit"], button[data-disabled="false"], button[data-disabled="true"]',
+    containerSelector: 'div[class*="flex"], [class*="items-center"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: true
+  },
+  grok: {
+    domain: "x.com",
+    buttonSelector: 'button[aria-label="Grok something"], button[aria-label="Cancel"], button[aria-disabled="true"]',
+    containerSelector: 'div[class*="css-175oi2r"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: false
+  },
+  deepseek: {
+    domain: "chat.deepseek.com",
+    buttonSelector: 'div[class*="f6d670"], div[class*="bcc55ca1"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: "textarea",
+    dynamicButtonCheck: false
+  }
+};
+
+/** Helper that checks the current domain and returns the matched platform key */
+var getCurrentPlatform = function getCurrentPlatform() {
+  var host = window.location.hostname;
+  var found = Object.entries(PLATFORM_CONFIGS).find(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+      key = _ref2[0],
+      cfg = _ref2[1];
+    return cfg.domain.split(".").every(function (part) {
+      return host.includes(part);
+    });
+  });
+  return found ? found[0] : null;
+};
+
+/** Finds the container in which to position the button, if any. */
+var findPlatformButtonDiv = function findPlatformButtonDiv(el) {
+  var platform = getCurrentPlatform();
+  if (!platform) return null;
+  var cfg = PLATFORM_CONFIGS[platform];
+  var node = el;
+
+  // If the platform has dynamicButtonCheck, we might try to see if the site’s
+  // official button is already in the DOM, etc. (like in prompt-enhancer.js)
+  if (cfg.dynamicButtonCheck) {
+    document.querySelector(cfg.buttonSelector);
+    // Possibly check an alternativeButtonSelector, if any, etc.
+  }
+
+  // Walk upward until we find something that has the site’s official button.
+  while (node && node.tagName !== "BODY") {
+    if (node.querySelector(cfg.buttonSelector)) {
+      return node.closest(cfg.containerSelector) || node;
+    }
+    node = node.parentElement;
+  }
+
+  // Fallback: If we never found the container, we might
+  // just find the main text area and get that container
+  var fallbackArea = document.querySelector(cfg.textareaSelector);
+  if (fallbackArea) {
+    return fallbackArea.closest(cfg.containerSelector) || null;
+  }
+  return null;
+};
+
+/** The main “Enhance” button we’ll insert. We store a reference so we can remove it if needed. */
+var currentEnhanceButton = null;
+var observer = null;
+var targetContainer = null;
+
+/** Remove existing #pk_prompt_btn if we’ve created one before. */
+var removeEnhanceButton = function removeEnhanceButton() {
+  if (currentEnhanceButton) {
+    currentEnhanceButton.remove();
+    currentEnhanceButton = null;
+  }
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
+  targetContainer = null;
+};
+
+/** Positions the button for the recognized platform. */
+var positionButton = function positionButton() {
+  if (!currentEnhanceButton || !targetContainer) return;
+  var platform = getCurrentPlatform();
+  if (!platform) return;
+  var cfg = PLATFORM_CONFIGS[platform];
+  var containerRect = targetContainer.getBoundingClientRect();
+  var buttonSize = 36; // Match the size defined in BUTTON_STYLES
+
+  // Try to find the platform's button within the container
+  var platformButton = targetContainer.querySelector(cfg.buttonSelector);
+  if (platformButton) {
+    // Position relative to the platform's button
+    var platformButtonRect = platformButton.getBoundingClientRect();
+    var top = window.scrollY + platformButtonRect.top + (platformButtonRect.height - buttonSize) / 2;
+    var left = window.scrollX + platformButtonRect.left - buttonSize - 12; // Default 12px spacing
+
+    // Platform-specific adjustments
+    switch (platform) {
+      case "chatgpt":
+        // Fine-tune for ChatGPT's layout
+        left = window.scrollX + platformButtonRect.left - buttonSize - 16;
+        break;
+      case "claude":
+        // Claude's button needs more space
+        left = window.scrollX + platformButtonRect.left - buttonSize - 20;
+        break;
+      case "gemini":
+        // Gemini has a different layout
+        left = window.scrollX + platformButtonRect.left - buttonSize - 14;
+        break;
+      case "perplexity":
+        // Perplexity has a compact layout
+        left = window.scrollX + platformButtonRect.left - buttonSize - 10;
+        break;
+      case "notebookllm":
+        // NotebookLM needs extra space
+        left = window.scrollX + platformButtonRect.left - buttonSize - 24;
+        break;
+      case "deepseek":
+        left = window.scrollX + platformButtonRect.left - buttonSize - 50;
+      default:
+        // Default positioning already set
+        break;
+    }
+    currentEnhanceButton.style.top = "".concat(top, "px");
+    currentEnhanceButton.style.left = "".concat(left, "px");
+  } else {
+    // Fallback to container-based positioning if no platform button is found
+    var _top = window.scrollY + containerRect.top + (containerRect.height - buttonSize) / 2;
+    var _left = window.scrollX + containerRect.left + containerRect.width - buttonSize - 20;
+
+    // Some domain-specific tweaks for fallback positioning
+    switch (platform) {
+      case "chatgpt":
+        _left -= 30; // ChatGPT needs more space from right edge
+        break;
+      case "claude":
+        _left -= 25;
+        break;
+      case "gemini":
+        _left -= 40; // Gemini has other buttons on right edge
+        break;
+      default:
+        // Default offset
+        break;
+    }
+    currentEnhanceButton.style.top = "".concat(_top, "px");
+    currentEnhanceButton.style.left = "".concat(_left, "px");
+  }
+};
+
+/** Actually create the <button> & inject it into the DOM. Similar to “addButton()” in prompt-enhancer.js */
+function createEnhanceButton(container, textInput, platform) {
+  removeEnhanceButton(); // ensure old one is gone
+  var imageUrl = chrome.runtime.getURL("brain-logo.svg");
+  var BUTTON_STYLES = {
+    position: "absolute",
+    zIndex: 9999,
+    width: "36px",
+    height: "36px",
+    borderRadius: "12px",
+    backgroundColor: "#c6c6cb",
+    color: "#fff",
+    border: "1px solid transparent",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "all 0.3s ease"
+  };
+  var btn = document.createElement("button");
+  btn.id = "pk_prompt_btn";
+  //   btn.innerText = "Enhance"; // or replace with an icon
+  Object.assign(btn.style, BUTTON_STYLES);
+
+  // Create an img
+  var icon = document.createElement("img");
+  icon.src = imageUrl;
+  icon.style.width = "24px"; // adjust as needed
+  icon.style.height = "24px";
+  icon.alt = "Enhance";
+
+  // Append to button
+  btn.appendChild(icon);
+
+  // On click, do the “enhance” logic
+  btn.addEventListener("click", function (evt) {
+    evt.stopPropagation();
+    handleEnhancePrompt(textInput);
+  });
+
+  // Add hover effects via event listeners
+  btn.addEventListener("mouseenter", function () {
+    btn.style.backgroundColor = "#64d3d9";
+    // btn.style.transform = "translateY(-1px)";
+    // btn.style.boxShadow = "0 4px 12px rgba(11, 27, 249, 0.35)";
+  });
+  btn.addEventListener("mouseleave", function () {
+    btn.style.backgroundColor = "#c6c6cb";
+    btn.style.transform = "none";
+    // btn.style.boxShadow = "0 2px 8px #64d3d9";
+  });
+  // Append to body, store references
+  document.body.appendChild(btn);
+  currentEnhanceButton = btn;
+  targetContainer = container;
+
+  // position the button right away
+  positionButton();
+
+  // watch for container changes
+  observer = new MutationObserver(positionButton);
+  observer.observe(container, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    characterData: true
+  });
+
+  // also watch for resize / scroll
+  window.addEventListener("scroll", positionButton, true);
+  window.addEventListener("resize", positionButton, true);
+}
+
+/** The actual “enhance” logic - “handleEnhancePrompt” from the reference. */
+function handleEnhancePrompt(_x) {
+  return _handleEnhancePrompt.apply(this, arguments);
+}
+/** LLMEnhanceButton React component: sets up watchers for the text area on recognized domains. */
+function _handleEnhancePrompt() {
+  _handleEnhancePrompt = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(textInput) {
+    var _content;
+    var content, storage;
+    return _regeneratorRuntime().wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          // example: read from textInput (textarea or contentEditable)
+          content = "";
+          if (textInput.isContentEditable) content = textInput.textContent;else content = textInput.value;
+          content = (_content = content) === null || _content === void 0 ? void 0 : _content.trim();
+          if (content) {
+            _context.next = 6;
+            break;
+          }
+          console.log("No content to enhance");
+          return _context.abrupt("return");
+        case 6:
+          _context.next = 8;
+          return new Promise(function (resolve) {
+            chrome.storage.local.get("sessionState", function (res) {
+              resolve(res.sessionState);
+            });
+          });
+        case 8:
+          storage = _context.sent;
+          if (storage !== null && storage !== void 0 && storage.jwtToken) {
+            _context.next = 12;
+            break;
+          }
+          console.log("No token => show login modal");
+          // showLoginModal()
+          return _context.abrupt("return");
+        case 12:
+          // otherwise call your backend
+          try {
+            console.log("Enhancing prompt:", content);
+            // Example fetch:
+            // const resp = await fetch("https://api.promptimizeai.com/api/content/enhance/", { ... })
+            // if (!resp.ok) { showTryLaterModal() ... }
+            // let data = await resp.json()
+            // do bracket highlighting, etc.
+          } catch (err) {
+            console.error("Enhance failed:", err);
+            // showTryLaterModal()
+          }
+        case 13:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee);
+  }));
+  return _handleEnhancePrompt.apply(this, arguments);
+}
+var EnhanceBtn = function EnhanceBtn() {
+  var platformRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(getCurrentPlatform() || null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    // If not recognized domain, do nothing
+    if (!platformRef.current) {
+      console.log("LLMEnhanceButton: Not a recognized LLM domain");
+      return;
+    }
+    var platform = platformRef.current;
+    var cfg = PLATFORM_CONFIGS[platform];
+    if (!cfg) return;
+
+    // Try to find the text area on load
+    function checkAndAddButton() {
+      var textArea = document.querySelector(cfg.textareaSelector);
+      if (!textArea) return;
+      var container = findPlatformButtonDiv(textArea);
+      if (!container) return;
+
+      // If no button yet, create it
+      if (!document.getElementById("pk_prompt_btn")) {
+        createEnhanceButton(container, textArea, platform);
+      } else {
+        // or re-position existing
+        positionButton();
+      }
+    }
+    checkAndAddButton();
+
+    // set up a MutationObserver for entire body (like prompt-enhancer.js) to re-check
+    var observer = new MutationObserver(function () {
+      checkAndAddButton();
+    });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    // Also a focusin listener:
+    function handleFocusIn(evt) {
+      var target = evt.target;
+      if (!target) return;
+      // If the user focuses the recognized text area => add the button
+      if (target.matches(cfg.textareaSelector) || target.isContentEditable) {
+        var container = findPlatformButtonDiv(target);
+        if (container && !document.getElementById("pk_prompt_btn")) {
+          createEnhanceButton(container, target, platform);
+        }
+      }
+    }
+    document.addEventListener("focusin", handleFocusIn);
+
+    // Cleanup
+    return function () {
+      observer.disconnect();
+      document.removeEventListener("focusin", handleFocusIn);
+      window.removeEventListener("scroll", positionButton, true);
+      window.removeEventListener("resize", positionButton, true);
+      removeEnhanceButton();
+    };
+  }, []);
+
+  // This component doesn't visibly render anything itself – it just runs in the background to manage the button.
+  return null;
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EnhanceBtn);
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./src/components/Bubble/bubble.css":
+/*!********************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./src/components/Bubble/bubble.css ***!
+  \********************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -12,9 +486,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/sourceMaps.js */ "./node_modules/css-loader/dist/runtime/sourceMaps.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/sourceMaps.js */ "./node_modules/css-loader/dist/runtime/sourceMaps.js");
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 // Imports
 
@@ -22,7 +496,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, `.bubble-boy {
-  background-color: rgb(255, 255, 255) !important;
+  background-color: #181a20 !important;
   display: flex;
   flex-direction: row;
   border-radius: 50px 0 0 50px;
@@ -62,8 +536,34 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.bubble-boy {
   background-repeat: no-repeat;
   background-size: contain;
 }
+`, "",{"version":3,"sources":["webpack://./src/components/Bubble/bubble.css"],"names":[],"mappings":"AAAA;EACE,oCAAoC;EACpC,aAAa;EACb,mBAAmB;EACnB,4BAA4B;EAC5B,eAAe;EACf,QAAQ;EACR,WAAW;EACX,YAAY;EACZ,kBAAkB;EAClB,SAAS;EACT,UAAU;EACV,aAAa;EACb;;qFAEmF;;EAEnF,mGAAmG;EACnG,mBAAmB;EACnB,2BAA2B;EAC3B,eAAe;EACf,4BAA4B;EAC5B,sBAAsB;EACtB,aAAa;EACb,+BAA+B;AACjC;;AAEA;EACE,2BAA2B;EAC3B,mBAAmB;EACnB,qBAAqB;EACrB,WAAW;AACb;;AAEA;EACE,WAAW;EACX,YAAY;EACZ,2BAA2B;EAC3B,4BAA4B;EAC5B,wBAAwB;AAC1B","sourcesContent":[".bubble-boy {\n  background-color: #181a20 !important;\n  display: flex;\n  flex-direction: row;\n  border-radius: 50px 0 0 50px;\n  position: fixed;\n  right: 0;\n  width: 40px;\n  height: 40px;\n  z-index: 300000000;\n  margin: 0;\n  padding: 0;\n  bottom: 200px;\n  /* -webkit-box-shadow: -6px -9px 88px -25px rgba(0, 0, 0, 0.26);\n  -moz-box-shadow: -6px -9px 88px -25px rgba(0, 0, 0, 0.26);\n  box-shadow: 0 3.2px 12px 0 rgba(0, 0, 0, 0.24), 0 5px 25px 0 rgba(0, 0, 0, 0.24); */\n\n  box-shadow: 0 0 1px 0 #0c0d190f, 0 6px 24px #0c0d190f, 0 12px 48px #0c0d190f, 0 24px 96px #0c0d190f;\n  align-items: center;\n  justify-content: flex-start;\n  cursor: pointer;\n  transition: ease-in-out 0.3s;\n  box-sizing: border-box;\n  padding: auto;\n  /* border: 1px solid #d8d8d8; */\n}\n\n.bubble-boy:hover {\n  border-width: 1px 0 1px 1px;\n  border-style: solid;\n  border-color: #d8d8d8;\n  width: 46px;\n}\n\n.nodes-svg {\n  width: 30px;\n  height: 30px;\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: contain;\n}\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
-#pk-enhance-btn {
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./src/contentScript/contentScript.css":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./src/contentScript/contentScript.css ***!
+  \***********************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/sourceMaps.js */ "./node_modules/css-loader/dist/runtime/sourceMaps.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, `#pk-enhance-btn {
   background-color: red;
 }
 
@@ -132,7 +632,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.bubble-boy {
 .input-overlay .enhance-btn {
   pointer-events: auto;
 }
-`, "",{"version":3,"sources":["webpack://./src/contentScript/contentScript.css"],"names":[],"mappings":"AAAA;EACE,+CAA+C;EAC/C,aAAa;EACb,mBAAmB;EACnB,4BAA4B;EAC5B,eAAe;EACf,QAAQ;EACR,WAAW;EACX,YAAY;EACZ,kBAAkB;EAClB,SAAS;EACT,UAAU;EACV,aAAa;EACb;;qFAEmF;;EAEnF,mGAAmG;EACnG,mBAAmB;EACnB,2BAA2B;EAC3B,eAAe;EACf,4BAA4B;EAC5B,sBAAsB;EACtB,aAAa;EACb,+BAA+B;AACjC;;AAEA;EACE,2BAA2B;EAC3B,mBAAmB;EACnB,qBAAqB;EACrB,WAAW;AACb;;AAEA;EACE,WAAW;EACX,YAAY;EACZ,2BAA2B;EAC3B,4BAA4B;EAC5B,wBAAwB;AAC1B;;AAEA;EACE,qBAAqB;AACvB;;AAEA;EACE,eAAe;EACf,YAAY;EACZ,WAAW;EACX,cAAc;AAChB;;AAEA;EACE,aAAa;EACb,yBAAyB;AAC3B;;AAEA;EACE;;;gBAGc;AAChB;;AAEA;EACE,kBAAkB;EAClB,qBAAqB;EACrB,eAAe;EACf,YAAY;EACZ,yBAAyB;EACzB,YAAY;EACZ,mBAAmB;EACnB,eAAe;EACf,gBAAgB;EAChB,WAAW;EACX,YAAY;AACd;AACA;;;;;;;;;;;;;;;;;;;;;;;GAuBG;;AAEH;EACE,oBAAoB;AACtB;;AAEA,4CAA4C;AAC5C;EACE,oBAAoB;AACtB","sourcesContent":[".bubble-boy {\n  background-color: rgb(255, 255, 255) !important;\n  display: flex;\n  flex-direction: row;\n  border-radius: 50px 0 0 50px;\n  position: fixed;\n  right: 0;\n  width: 40px;\n  height: 40px;\n  z-index: 300000000;\n  margin: 0;\n  padding: 0;\n  bottom: 200px;\n  /* -webkit-box-shadow: -6px -9px 88px -25px rgba(0, 0, 0, 0.26);\n  -moz-box-shadow: -6px -9px 88px -25px rgba(0, 0, 0, 0.26);\n  box-shadow: 0 3.2px 12px 0 rgba(0, 0, 0, 0.24), 0 5px 25px 0 rgba(0, 0, 0, 0.24); */\n\n  box-shadow: 0 0 1px 0 #0c0d190f, 0 6px 24px #0c0d190f, 0 12px 48px #0c0d190f, 0 24px 96px #0c0d190f;\n  align-items: center;\n  justify-content: flex-start;\n  cursor: pointer;\n  transition: ease-in-out 0.3s;\n  box-sizing: border-box;\n  padding: auto;\n  /* border: 1px solid #d8d8d8; */\n}\n\n.bubble-boy:hover {\n  border-width: 1px 0 1px 1px;\n  border-style: solid;\n  border-color: #d8d8d8;\n  width: 46px;\n}\n\n.nodes-svg {\n  width: 30px;\n  height: 30px;\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: contain;\n}\n\n#pk-enhance-btn {\n  background-color: red;\n}\n\n#pk-enhancer-container {\n  position: fixed;\n  bottom: 60px;\n  right: 20px;\n  z-index: 10000;\n}\n\n.input-overlay {\n  display: flex;\n  justify-content: flex-end;\n}\n\n.quick-access-btn {\n  /* border-radius: 8px;\n  background-color: red;\n  height: 10px;\n  width: 10px; */\n}\n\n.enhance-btn {\n  position: relative;\n  display: inline-block;\n  font-size: 16px;\n  color: white;\n  background-color: #ff0707;\n  border: none;\n  border-radius: 50px;\n  cursor: pointer;\n  overflow: hidden;\n  width: 15px;\n  height: 15px;\n}\n/*\n.enhance-btn::before {\n  content: \"\";\n  position: absolute;\n  top: 0;\n  left: -100%;\n  width: 200%;\n  height: 100%;\n  background: linear-gradient(90deg, transparent, #00f6ff, transparent);\n  transform: skewX(-45deg);\n  animation: wave 2s infinite;\n}\n\n@keyframes wave {\n  0% {\n    left: -100%;\n  }\n  50% {\n    left: 0;\n  }\n  100% {\n    left: 100%;\n  }\n} */\n\n.input-overlay {\n  pointer-events: none;\n}\n\n/* Allow the button itself to be clickable */\n.input-overlay .enhance-btn {\n  pointer-events: auto;\n}\n"],"sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./src/contentScript/contentScript.css"],"names":[],"mappings":"AAAA;EACE,qBAAqB;AACvB;;AAEA;EACE,eAAe;EACf,YAAY;EACZ,WAAW;EACX,cAAc;AAChB;;AAEA;EACE,aAAa;EACb,yBAAyB;AAC3B;;AAEA;EACE;;;gBAGc;AAChB;;AAEA;EACE,kBAAkB;EAClB,qBAAqB;EACrB,eAAe;EACf,YAAY;EACZ,yBAAyB;EACzB,YAAY;EACZ,mBAAmB;EACnB,eAAe;EACf,gBAAgB;EAChB,WAAW;EACX,YAAY;AACd;AACA;;;;;;;;;;;;;;;;;;;;;;;GAuBG;;AAEH;EACE,oBAAoB;AACtB;;AAEA,4CAA4C;AAC5C;EACE,oBAAoB;AACtB","sourcesContent":["#pk-enhance-btn {\n  background-color: red;\n}\n\n#pk-enhancer-container {\n  position: fixed;\n  bottom: 60px;\n  right: 20px;\n  z-index: 10000;\n}\n\n.input-overlay {\n  display: flex;\n  justify-content: flex-end;\n}\n\n.quick-access-btn {\n  /* border-radius: 8px;\n  background-color: red;\n  height: 10px;\n  width: 10px; */\n}\n\n.enhance-btn {\n  position: relative;\n  display: inline-block;\n  font-size: 16px;\n  color: white;\n  background-color: #ff0707;\n  border: none;\n  border-radius: 50px;\n  cursor: pointer;\n  overflow: hidden;\n  width: 15px;\n  height: 15px;\n}\n/*\n.enhance-btn::before {\n  content: \"\";\n  position: absolute;\n  top: 0;\n  left: -100%;\n  width: 200%;\n  height: 100%;\n  background: linear-gradient(90deg, transparent, #00f6ff, transparent);\n  transform: skewX(-45deg);\n  animation: wave 2s infinite;\n}\n\n@keyframes wave {\n  0% {\n    left: -100%;\n  }\n  50% {\n    left: 0;\n  }\n  100% {\n    left: 100%;\n  }\n} */\n\n.input-overlay {\n  pointer-events: none;\n}\n\n/* Allow the button itself to be clickable */\n.input-overlay .enhance-btn {\n  pointer-events: auto;\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -27450,6 +27950,59 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./src/components/Bubble/bubble.css":
+/*!******************************************!*\
+  !*** ./src/components/Bubble/bubble.css ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/styleDomAPI.js */ "./node_modules/style-loader/dist/runtime/styleDomAPI.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/insertBySelector.js */ "./node_modules/style-loader/dist/runtime/insertBySelector.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js */ "./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/insertStyleElement.js */ "./node_modules/style-loader/dist/runtime/insertStyleElement.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "./node_modules/style-loader/dist/runtime/styleTagTransform.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_bubble_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js!./bubble.css */ "./node_modules/css-loader/dist/cjs.js!./src/components/Bubble/bubble.css");
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
+options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_bubble_css__WEBPACK_IMPORTED_MODULE_6__["default"], options);
+
+
+
+
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_bubble_css__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_bubble_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_bubble_css__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
+
+
+/***/ }),
+
 /***/ "./src/contentScript/contentScript.css":
 /*!*********************************************!*\
   !*** ./src/contentScript/contentScript.css ***!
@@ -27959,309 +28512,50 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
 /* harmony import */ var _contentScript_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./contentScript.css */ "./src/contentScript/contentScript.css");
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_3__);
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
-function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+/* harmony import */ var _components_Bubble__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Bubble */ "./src/components/Bubble/index.jsx");
+/* harmony import */ var _components_EnhanceBtn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/EnhanceBtn */ "./src/components/EnhanceBtn/index.jsx");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_5__);
 
 
 
 
 
-// Input detection constants
-var INPUT_SELECTORS = {
-  textarea: "textarea, #prompt-textarea",
-  contentEditable: '[contenteditable="true"]',
-  placeholder: "[data-placeholder]"
-};
 
-//! START ZONE
-var PLATFORM_CONFIGS = {
-  chatgpt: {
-    domain: "chatgpt.com",
-    buttonSelector: 'button[aria-label="Send prompt"],button[aria-label="Start voice mode"], button[aria-label="Start voice input"], button[aria-label="Stop streaming"]',
-    containerSelector: 'div[class*="flex"][class*="items-center"]',
-    textareaSelector: "textarea",
-    dynamicButtonCheck: false
-  },
-  claude: {
-    domain: "claude.ai",
-    buttonSelector: 'button[type="submit"], button[aria-label="Upload content"]',
-    containerSelector: 'div[class*="flex"]',
-    textareaSelector: "textarea, [contenteditable='true']",
-    dynamicButtonCheck: false
-  },
-  gemini: {
-    domain: "gemini.google.com",
-    buttonSelector: 'button[aria-label*="send message"],button[aria-label*="Microphone"], button[class*="hidden"]',
-    containerSelector: 'div[class*="send-button-container"],[class*="input-buttons-wrapper-bottom"]',
-    textareaSelector: "div[class*='input-area']",
-    dynamicButtonCheck: false,
-    isGemini: false
-  },
-  perplexity: {
-    domain: "perplexity.ai",
-    buttonSelector: 'button[type="Submit"], button[aria-label="Submit"], button[class*="text-textOff"], button[class*="text-white"]',
-    containerSelector: 'div[class*="flex"][class*="items-center"]',
-    textareaSelector: "textarea",
-    dynamicButtonCheck: true
-  },
-  copilot: {
-    domain: "copilot.microsoft.com",
-    buttonSelector: 'button[aria-label*="Talk to Copilot"], button[aria-label="Submit message"]',
-    containerSelector: 'div[class*="flex"]',
-    textareaSelector: 'textarea[placeholder*="Enter a message"], textarea.copilot-textarea',
-    dynamicButtonCheck: true
-  },
-  notebookllm: {
-    domain: "notebooklm.google.com",
-    buttonSelector: 'button[aria-label*="Submit"], button[disabled="true"], button[class*="submit-button"]',
-    containerSelector: 'div[class*="input-group"]',
-    textareaSelector: 'textarea[aria-label*="Query box"]',
-    dynamicButtonCheck: true
-  },
-  sora: {
-    domain: "sora.com",
-    buttonSelector: 'button[type="submit"], button[data-disabled="false"], button[data-disabled="true"]',
-    containerSelector: 'div[class*="flex"], [class*="items-center"]',
-    textareaSelector: "textarea, [contenteditable='true']",
-    dynamicButtonCheck: true
-  },
-  grok: {
-    domain: "x.com",
-    buttonSelector: 'button[aria-label="Grok something"], button[aria-label="Cancel"], button[aria-disabled="true"]',
-    containerSelector: 'div[class*="css-175oi2r"]',
-    textareaSelector: "textarea, [contenteditable='true']",
-    dynamicButtonCheck: false
-  },
-  deepseek: {
-    domain: "chat.deepseek.com",
-    buttonSelector: 'div[class*="f6d670"], div[class*="bcc55ca1"]',
-    containerSelector: 'div[class*="flex"]',
-    textareaSelector: "textarea",
-    dynamicButtonCheck: false
-  }
-};
-var getCurrentPlatform = function getCurrentPlatform() {
-  var host = window.location.hostname;
-  var found = Object.entries(PLATFORM_CONFIGS).find(function (_ref) {
-    var _ref2 = _slicedToArray(_ref, 2),
-      key = _ref2[0],
-      cfg = _ref2[1];
-    return cfg.domain.split(".").every(function (part) {
-      return host.includes(part);
-    });
-  });
-  return found ? found[0] : null;
-};
+function ContentScriptApp() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_Bubble__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_EnhanceBtn__WEBPACK_IMPORTED_MODULE_4__["default"], null));
+}
 
-//! END ZONE
+/**
+ * Creates a root <div>, mounts our React app once.
+ * We keep a check so we don't inject multiple times.
+ */
+function initializeOverlay() {
+  // Avoid duplicates
+  if (document.getElementById("my-extension-root")) return;
 
-// Load bubble image from extension
-var imageUrl = chrome.runtime.getURL("nodes_nbg_dark.svg");
-// Bubble Component
-var Bubble = function Bubble() {
-  var handleClick = function handleClick() {
-    chrome.runtime.sendMessage({
-      type: "openSidePanel"
-    }, function (response) {
-      console.log("Background response:", response);
-    });
-  };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "bubble-boy",
-    onClick: handleClick
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "nodes-svg",
-    style: {
-      backgroundImage: "url(".concat(imageUrl, ")")
-    }
-  }));
-};
+  // Create a container for our content script UI
+  var container = document.createElement("div");
+  container.id = "my-extension-root";
+  document.body.appendChild(container);
 
-// Main App Component
-var OverlayApp = function OverlayApp() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
-    _useState2 = _slicedToArray(_useState, 2),
-    textInputs = _useState2[0],
-    setTextInputs = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState4 = _slicedToArray(_useState3, 2),
-    focusedId = _useState4[0],
-    setFocusedId = _useState4[1];
+  // Render the “ContentScriptApp”
+  (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(container).render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ContentScriptApp, null));
+}
 
-  // Find all text inputs on the page
-  var findTextInputs = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
-    var inputs = [];
-    Object.values(INPUT_SELECTORS).forEach(function (selector) {
-      document.querySelectorAll(selector).forEach(function (element) {
-        var style = window.getComputedStyle(element);
-        if (style.display !== "none" && style.visibility !== "hidden") {
-          inputs.push({
-            id: element.id || "input-".concat(Math.random().toString(36).substr(2, 9)),
-            element: element,
-            type: element.matches(INPUT_SELECTORS.textarea) ? "textarea" : element.matches(INPUT_SELECTORS.contentEditable) ? "contentEditable" : "placeholder",
-            rect: element.getBoundingClientRect()
-          });
-        }
-      });
-    });
-    return inputs;
-  }, []);
-
-  // Update inputs when DOM changes
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var updateInputs = function updateInputs() {
-      setTextInputs(findTextInputs());
-    };
-
-    // Initial setup
-    updateInputs();
-
-    // Setup mutation observer
-    var observer = new MutationObserver(function () {
-      requestAnimationFrame(updateInputs);
-    });
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ["contenteditable", "data-placeholder"]
-    });
-    return function () {
-      return observer.disconnect();
-    };
-  }, [findTextInputs]);
-
-  // Setup focus listeners
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var handleFocus = function handleFocus(input) {
-      setFocusedId(input.id);
-    };
-    var handleBlur = function handleBlur() {
-      setFocusedId(null);
-    };
-    textInputs.forEach(function (input) {
-      input.element.addEventListener("focus", function () {
-        return handleFocus(input);
-      });
-      input.element.addEventListener("blur", handleBlur);
-    });
-    return function () {
-      textInputs.forEach(function (input) {
-        input.element.removeEventListener("focus", function () {
-          return handleFocus(input);
-        });
-        input.element.removeEventListener("blur", handleBlur);
-      });
-    };
-  }, [textInputs]);
-
-  // Update positions on scroll/resize
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var handleViewportChange = function handleViewportChange() {
-      setTextInputs(function (prev) {
-        return prev.map(function (input) {
-          return _objectSpread(_objectSpread({}, input), {}, {
-            rect: input.element.getBoundingClientRect()
-          });
-        });
-      });
-    };
-    window.addEventListener("scroll", handleViewportChange);
-    window.addEventListener("resize", handleViewportChange);
-    return function () {
-      window.removeEventListener("scroll", handleViewportChange);
-      window.removeEventListener("resize", handleViewportChange);
-    };
-  }, []);
-
-  // Enhancer click handler
-  var handleEnhance = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function (input) {
-    var content = "";
-    if (input.type === "textarea") {
-      content = input.element.value || input.element.innerText;
-    } else if (input.type === "contentEditable") {
-      content = input.element.innerText;
-    } else {
-      content = input.element.textContent;
-    }
-    content = content.trim();
-    if (!content) {
-      console.warn("No content in the input field.");
-      return;
-    }
-    chrome.runtime.sendMessage({
-      type: "enhancePrompt",
-      content: content
-    }, function (response) {
-      if (chrome.runtime.lastError) {
-        console.error("Message failed:", chrome.runtime.lastError.message);
-      } else {
-        console.log("Background response:", response);
-      }
-    });
-  }, []);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    id: "bubble-container"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Bubble, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "overlay-container"
-  }, textInputs.map(function (input) {
-    return focusedId === input.id && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      // key={input.id}
-      className: "input-overlay",
-      style: {
-        position: "absolute",
-        top: input.rect.top + window.scrollY,
-        left: input.rect.left + window.scrollX,
-        width: input.rect.width,
-        height: input.rect.height,
-        zIndex: 9999
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-      className: classnames__WEBPACK_IMPORTED_MODULE_3___default()("enhance-btn", {
-        "enhance-btn--textarea": input.type === "textarea",
-        "enhance-btn--content-editable": input.type === "contentEditable",
-        "enhance-btn--placeholder": input.type === "placeholder"
-      }),
-      onClick: function onClick() {
-        return handleEnhance(input);
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      className: "quick-access-btn"
-    })));
-  })));
-};
-
-// Initialize the app
-var initializeOverlay = function initializeOverlay() {
-  // Check if app is already initialized
-  if (document.getElementById("prompt-enhancer-root")) return;
-  var root = document.createElement("div");
-  root.id = "prompt-enhancer-root";
-  document.body.appendChild(root);
-  (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(root).render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(OverlayApp, null));
-};
-
-// Run initialization
+// 1) If DOM not ready, wait; else inject right away
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initializeOverlay);
 } else {
   initializeOverlay();
 }
 
-// Re-initialize on navigation (for SPAs)
+/**
+ * 2) For single-page apps (SPAs), watch DOM changes
+ *    and re-run initializeOverlay if e.g. route changed
+ */
 var navigationObserver = new MutationObserver(function () {
+  // Using requestAnimationFrame so the DOM can settle
   requestAnimationFrame(initializeOverlay);
 });
 navigationObserver.observe(document.body, {

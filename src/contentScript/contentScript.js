@@ -1,291 +1,49 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import "./contentScript.css";
+import Bubble from "../components/Bubble";
+import EnhanceBtn from "../components/EnhanceBtn";
 import cn from "classnames";
 
-// Input detection constants
-const INPUT_SELECTORS = {
-  textarea: "textarea, #prompt-textarea",
-  contentEditable: '[contenteditable="true"]',
-  placeholder: "[data-placeholder]",
-};
-
-//! START ZONE
-const PLATFORM_CONFIGS = {
-  chatgpt: {
-    domain: "chatgpt.com",
-    buttonSelector: 'button[aria-label="Send prompt"],button[aria-label="Start voice mode"], button[aria-label="Start voice input"], button[aria-label="Stop streaming"]',
-    containerSelector: 'div[class*="flex"][class*="items-center"]',
-    textareaSelector: "textarea",
-    dynamicButtonCheck: false,
-  },
-  claude: {
-    domain: "claude.ai",
-    buttonSelector: 'button[type="submit"], button[aria-label="Upload content"]',
-    containerSelector: 'div[class*="flex"]',
-    textareaSelector: "textarea, [contenteditable='true']",
-    dynamicButtonCheck: false,
-  },
-  gemini: {
-    domain: "gemini.google.com",
-    buttonSelector: 'button[aria-label*="send message"],button[aria-label*="Microphone"], button[class*="hidden"]',
-    containerSelector: 'div[class*="send-button-container"],[class*="input-buttons-wrapper-bottom"]',
-    textareaSelector: "div[class*='input-area']",
-    dynamicButtonCheck: false,
-    isGemini: false,
-  },
-  perplexity: {
-    domain: "perplexity.ai",
-    buttonSelector: 'button[type="Submit"], button[aria-label="Submit"], button[class*="text-textOff"], button[class*="text-white"]',
-    containerSelector: 'div[class*="flex"][class*="items-center"]',
-    textareaSelector: "textarea",
-    dynamicButtonCheck: true,
-  },
-  copilot: {
-    domain: "copilot.microsoft.com",
-    buttonSelector: 'button[aria-label*="Talk to Copilot"], button[aria-label="Submit message"]',
-    containerSelector: 'div[class*="flex"]',
-    textareaSelector: 'textarea[placeholder*="Enter a message"], textarea.copilot-textarea',
-    dynamicButtonCheck: true,
-  },
-  notebookllm: {
-    domain: "notebooklm.google.com",
-    buttonSelector: 'button[aria-label*="Submit"], button[disabled="true"], button[class*="submit-button"]',
-    containerSelector: 'div[class*="input-group"]',
-    textareaSelector: 'textarea[aria-label*="Query box"]',
-    dynamicButtonCheck: true,
-  },
-  sora: {
-    domain: "sora.com",
-    buttonSelector: 'button[type="submit"], button[data-disabled="false"], button[data-disabled="true"]',
-    containerSelector: 'div[class*="flex"], [class*="items-center"]',
-    textareaSelector: "textarea, [contenteditable='true']",
-    dynamicButtonCheck: true,
-  },
-  grok: {
-    domain: "x.com",
-    buttonSelector: 'button[aria-label="Grok something"], button[aria-label="Cancel"], button[aria-disabled="true"]',
-    containerSelector: 'div[class*="css-175oi2r"]',
-    textareaSelector: "textarea, [contenteditable='true']",
-    dynamicButtonCheck: false,
-  },
-  deepseek: {
-    domain: "chat.deepseek.com",
-    buttonSelector: 'div[class*="f6d670"], div[class*="bcc55ca1"]',
-    containerSelector: 'div[class*="flex"]',
-    textareaSelector: "textarea",
-    dynamicButtonCheck: false,
-  },
-};
-const getCurrentPlatform = () => {
-  const host = window.location.hostname;
-  const found = Object.entries(PLATFORM_CONFIGS).find(([key, cfg]) => cfg.domain.split(".").every(part => host.includes(part)));
-  return found ? found[0] : null;
-};
-
-//! END ZONE
-
-// Load bubble image from extension
-const imageUrl = chrome.runtime.getURL("nodes_nbg_dark.svg");
-// Bubble Component
-const Bubble = () => {
-  const handleClick = () => {
-    chrome.runtime.sendMessage({ type: "openSidePanel" }, response => {
-      console.log("Background response:", response);
-    });
-  };
-
-  return (
-    <div className="bubble-boy" onClick={handleClick}>
-      <div className="nodes-svg" style={{ backgroundImage: `url(${imageUrl})` }} />
-    </div>
-  );
-};
-
-// Main App Component
-const OverlayApp = () => {
-  const [textInputs, setTextInputs] = useState([]);
-  const [focusedId, setFocusedId] = useState(null);
-
-  // Find all text inputs on the page
-  const findTextInputs = useCallback(() => {
-    const inputs = [];
-    Object.values(INPUT_SELECTORS).forEach(selector => {
-      document.querySelectorAll(selector).forEach(element => {
-        const style = window.getComputedStyle(element);
-        if (style.display !== "none" && style.visibility !== "hidden") {
-          inputs.push({
-            id: element.id || `input-${Math.random().toString(36).substr(2, 9)}`,
-            element,
-            type: element.matches(INPUT_SELECTORS.textarea) ? "textarea" : element.matches(INPUT_SELECTORS.contentEditable) ? "contentEditable" : "placeholder",
-            rect: element.getBoundingClientRect(),
-          });
-        }
-      });
-    });
-    return inputs;
-  }, []);
-
-  // Update inputs when DOM changes
-  useEffect(() => {
-    const updateInputs = () => {
-      setTextInputs(findTextInputs());
-    };
-
-    // Initial setup
-    updateInputs();
-
-    // Setup mutation observer
-    const observer = new MutationObserver(() => {
-      requestAnimationFrame(updateInputs);
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ["contenteditable", "data-placeholder"],
-    });
-
-    return () => observer.disconnect();
-  }, [findTextInputs]);
-
-  // Setup focus listeners
-  useEffect(() => {
-    const handleFocus = input => {
-      setFocusedId(input.id);
-    };
-
-    const handleBlur = () => {
-      setFocusedId(null);
-    };
-
-    textInputs.forEach(input => {
-      input.element.addEventListener("focus", () => handleFocus(input));
-      input.element.addEventListener("blur", handleBlur);
-    });
-
-    return () => {
-      textInputs.forEach(input => {
-        input.element.removeEventListener("focus", () => handleFocus(input));
-        input.element.removeEventListener("blur", handleBlur);
-      });
-    };
-  }, [textInputs]);
-
-  // Update positions on scroll/resize
-  useEffect(() => {
-    const handleViewportChange = () => {
-      setTextInputs(prev =>
-        prev.map(input => ({
-          ...input,
-          rect: input.element.getBoundingClientRect(),
-        }))
-      );
-    };
-
-    window.addEventListener("scroll", handleViewportChange);
-    window.addEventListener("resize", handleViewportChange);
-
-    return () => {
-      window.removeEventListener("scroll", handleViewportChange);
-      window.removeEventListener("resize", handleViewportChange);
-    };
-  }, []);
-
-  // Enhancer click handler
-  const handleEnhance = useCallback(input => {
-    let content = "";
-    if (input.type === "textarea") {
-      content = input.element.value || input.element.innerText;
-    } else if (input.type === "contentEditable") {
-      content = input.element.innerText;
-    } else {
-      content = input.element.textContent;
-    }
-
-    content = content.trim();
-    if (!content) {
-      console.warn("No content in the input field.");
-      return;
-    }
-
-    chrome.runtime.sendMessage({ type: "enhancePrompt", content }, response => {
-      if (chrome.runtime.lastError) {
-        console.error("Message failed:", chrome.runtime.lastError.message);
-      } else {
-        console.log("Background response:", response);
-      }
-    });
-  }, []);
-
+function ContentScriptApp() {
   return (
     <>
-      {/* Bubble */}
-      <div id="bubble-container">
-        <Bubble />
-      </div>
-
-      {/* Overlays */}
-      <div className="overlay-container">
-        {textInputs.map(
-          input =>
-            focusedId === input.id && (
-              <div
-                // key={input.id}
-                className="input-overlay"
-                style={{
-                  position: "absolute",
-                  top: input.rect.top + window.scrollY,
-                  left: input.rect.left + window.scrollX,
-                  width: input.rect.width,
-                  height: input.rect.height,
-                  zIndex: 9999,
-                }}
-              >
-                <button
-                  className={cn("enhance-btn", {
-                    "enhance-btn--textarea": input.type === "textarea",
-                    "enhance-btn--content-editable": input.type === "contentEditable",
-                    "enhance-btn--placeholder": input.type === "placeholder",
-                  })}
-                  onClick={() => handleEnhance(input)}
-                >
-                  <div className="quick-access-btn" />
-                </button>
-              </div>
-            )
-        )}
-      </div>
+      <Bubble />
+      <EnhanceBtn />
     </>
   );
-};
+}
 
-// Initialize the app
-const initializeOverlay = () => {
-  // Check if app is already initialized
-  if (document.getElementById("prompt-enhancer-root")) return;
+/**
+ * Creates a root <div>, mounts our React app once.
+ * We keep a check so we don't inject multiple times.
+ */
+function initializeOverlay() {
+  // Avoid duplicates
+  if (document.getElementById("my-extension-root")) return;
 
-  const root = document.createElement("div");
-  root.id = "prompt-enhancer-root";
-  document.body.appendChild(root);
+  // Create a container for our content script UI
+  const container = document.createElement("div");
+  container.id = "my-extension-root";
+  document.body.appendChild(container);
 
-  createRoot(root).render(<OverlayApp />);
-};
+  // Render the “ContentScriptApp”
+  createRoot(container).render(<ContentScriptApp />);
+}
 
-// Run initialization
+// 1) If DOM not ready, wait; else inject right away
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initializeOverlay);
 } else {
   initializeOverlay();
 }
 
-// Re-initialize on navigation (for SPAs)
+/**
+ * 2) For single-page apps (SPAs), watch DOM changes
+ *    and re-run initializeOverlay if e.g. route changed
+ */
 const navigationObserver = new MutationObserver(() => {
+  // Using requestAnimationFrame so the DOM can settle
   requestAnimationFrame(initializeOverlay);
 });
-
-navigationObserver.observe(document.body, {
-  childList: true,
-  subtree: true,
-});
+navigationObserver.observe(document.body, { childList: true, subtree: true });
