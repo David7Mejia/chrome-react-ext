@@ -1,32 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import "./contentScript.css";
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import { devToolsEnhancer } from "@redux-devtools/extension";
+
 import Bubble from "../components/Bubble";
 import EnhanceBtn from "../components/EnhanceBtn";
 import cn from "classnames";
-import promptReducer from "../../store/features/prompt";
-
-// Logging Middleware
-const loggerMiddleware = store => next => action => {
-  console.group(action.type);
-  console.log("%c Previous State:", "color: gray", store.getState());
-  console.log("%c Action:", "color: blue", action);
-  const result = next(action);
-  console.log("%c Next State:", "color: green", store.getState());
-  console.groupEnd();
-  return result;
-};
-
-const store = configureStore({
-  reducer: {
-    prompt: promptReducer,
-  },
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(loggerMiddleware),
-  enhancers: getDefaultEnhancers => getDefaultEnhancers().concat(devToolsEnhancer()),
-});
 
 function ContentScriptApp() {
   return (
