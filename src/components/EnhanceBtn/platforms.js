@@ -1,0 +1,67 @@
+const PLATFORM_CONFIGS = {
+  chatgpt: {
+    domain: "chatgpt.com",
+    buttonSelector: 'button[data-testid="composer-speech-button"], button[aria-label="Start voice mode"], button[aria-label="Send prompt"]',
+    containerSelector: 'div[class*="flex"] form[class*="w-full"] div[class*="flex"][class*="items-center"]',
+    textareaSelector: '#prompt-textarea, [contenteditable="true"].ProseMirror, textarea',
+    dynamicButtonCheck: false,
+  },
+  claude: {
+    domain: "claude.ai",
+    buttonSelector: 'button[type="submit"], button[aria-label="Upload content"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: false,
+  },
+  gemini: {
+    domain: "gemini.google.com",
+    buttonSelector: 'button[aria-label*="send message"],button[aria-label*="Microphone"], button[class*="hidden"]',
+    containerSelector: 'div[class*="send-button-container"],[class*="input-buttons-wrapper-bottom"]',
+    textareaSelector: "div[class*='input-area']",
+    dynamicButtonCheck: false,
+    isGemini: false,
+  },
+  perplexity: {
+    domain: "perplexity.ai",
+    buttonSelector: 'button[type="Submit"], button[aria-label="Submit"], button[class*="text-textOff"], button[class*="text-white"]',
+    containerSelector: 'div[class*="flex"][class*="items-center"]',
+    textareaSelector: "textarea",
+    dynamicButtonCheck: true,
+  },
+  copilot: {
+    domain: "copilot.microsoft.com",
+    buttonSelector: 'button[aria-label*="Talk to Copilot"], button[aria-label="Submit message"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: 'textarea[placeholder*="Enter a message"], textarea.copilot-textarea',
+    dynamicButtonCheck: true,
+  },
+  notebookllm: {
+    domain: "notebooklm.google.com",
+    buttonSelector: 'button[aria-label*="Submit"], button[disabled="true"], button[class*="submit-button"]',
+    containerSelector: 'div[class*="input-group"]',
+    textareaSelector: 'textarea[aria-label*="Query box"]',
+    dynamicButtonCheck: true,
+  },
+  sora: {
+    domain: "sora.com",
+    buttonSelector: 'button[type="submit"], button[data-disabled="false"], button[data-disabled="true"]',
+    containerSelector: 'div[class*="flex"], [class*="items-center"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: true,
+  },
+  grok: {
+    domain: "x.com",
+    buttonSelector: 'button[aria-label="Grok something"], button[aria-label="Cancel"], button[aria-disabled="true"]',
+    containerSelector: 'div[class*="css-175oi2r"]',
+    textareaSelector: "textarea, [contenteditable='true']",
+    dynamicButtonCheck: false,
+  },
+  deepseek: {
+    domain: "chat.deepseek.com",
+    buttonSelector: 'div[class*="f6d670"], div[class*="bcc55ca1"]',
+    containerSelector: 'div[class*="flex"]',
+    textareaSelector: "textarea",
+    dynamicButtonCheck: false,
+  },
+};
+export default PLATFORM_CONFIGS;

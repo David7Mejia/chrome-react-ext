@@ -607,11 +607,14 @@ body {
 }
 
 .advanced-options-popover {
-  color: white;
+  color: white !important;
+  /* color: #21262d; */
 }
 .advanced-options-btn {
   background-image: url("../../static/settings_v1.svg");
   border: none;
+  color: white !important;
+  
 }
 
 .advanced-options-btn:hover {

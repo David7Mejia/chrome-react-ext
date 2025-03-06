@@ -23,10 +23,7 @@ import {
 } from "@ant-design/icons";
 import { Modal, Button, Dropdown, Menu, Popover, Space, Switch } from "antd";
 
-const Message = ({ content, isUser }) => (
-<div className={`message-bubble ${isUser ? "user-message" : "ai-message"}`}>
-  {isUser ? content : <ReactMarkdown>{content}</ReactMarkdown>}
-  </div>);
+const Message = ({ content, isUser }) => <div className={`message-bubble ${isUser ? "user-message" : "ai-message"}`}>{isUser ? content : <ReactMarkdown>{content}</ReactMarkdown>}</div>;
 
 const SidePanel = () => {
   const dispatch = useDispatch();
@@ -129,17 +126,21 @@ const SidePanel = () => {
   //   },
   // ];
 
-  const content = (
+  const advancedSettings = (
     <div>
-      <h2>Prompt Controls</h2>
-      <p>Content</p>
-      <p>Content</p>
+      <h2>Fine Tune Prompt</h2>
+      <p>Role</p>
+      <p>Frameowrk</p>
+      <p>Format</p>
+      <p>Tone of Voice</p>
+      <p>Avoid</p>
+      <p>Context</p>
     </div>
   );
-  const handleInput = e => {
-    const content = e.currentTarget.innerText;
-    setPrompt(content);
-  };
+  // const handleInput = e => {
+  //   const content = e.currentTarget.innerText;
+  //   setPrompt(content);
+  // };
   const handleEnhance = () => {
     if (!prompt) {
       alert("Please enter a prompt.");
@@ -322,12 +323,11 @@ const SidePanel = () => {
                   </Button> */}
                     {/* {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} */}
                     <Popover
-                      overlayClassName="advanced-options-popover"
-                      color="#21262d"
+                      color="#fafafa"
                       arrow={false}
                       placement="topLeft"
                       className="advanced-options-btn"
-                      content={content}
+                      content={advancedSettings}
                       trigger="click"
                       type="primary"
                       onClick={toggleCollapsed}
