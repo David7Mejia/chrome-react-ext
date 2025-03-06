@@ -1,50 +1,65 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import { devToolsEnhancer } from "@redux-devtools/extension";
+import enhanceBtnReducer from "../../store/features/enhanceBtnReducer";
+import promptReducer from "../../store/features/prompt";
 import "./contentScript.css";
-
 import Bubble from "../components/Bubble";
 import EnhanceBtn from "../components/EnhanceBtn";
-import cn from "classnames";
+
+// Logging Middleware (same as sidepanel)
+const loggerMiddleware = store => next => action => {
+  console.group(action.type);
+  console.log("Previous State:", store.getState());
+  console.log("Action:", action);
+  const result = next(action);
+  console.log("Next State:", store.getState());
+  console.groupEnd();
+  return result;
+};
+
+// Configure store
+const store = configureStore({
+  reducer: {
+    enhanceBtn: enhanceBtnReducer,
+    prompt: promptReducer,
+  },
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(loggerMiddleware),
+  enhancers: getDefaultEnhancers => getDefaultEnhancers().concat(devToolsEnhancer()),
+});
 
 function ContentScriptApp() {
   return (
-    <>
+    <Provider store={store}>
       <Bubble />
       <EnhanceBtn />
-    </>
+    </Provider>
   );
 }
 
-/**
- * Creates a root <div>, mounts our React app once.
- * We keep a check so we don't inject multiple times.
- */
 function initializeOverlay() {
-  // Avoid duplicates
   if (document.getElementById("my-extension-root")) return;
 
-  // Create a container for our content script UI
   const container = document.createElement("div");
   container.id = "my-extension-root";
   document.body.appendChild(container);
 
-  // Render the “ContentScriptApp”
-  createRoot(container).render(<ContentScriptApp />);
+  createRoot(container).render(
+    <React.StrictMode>
+      <ContentScriptApp />
+    </React.StrictMode>
+  );
 }
 
-// 1) If DOM not ready, wait; else inject right away
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initializeOverlay);
 } else {
   initializeOverlay();
 }
 
-/**
- * 2) For single-page apps (SPAs), watch DOM changes
- *    and re-run initializeOverlay if e.g. route changed
- */
 const navigationObserver = new MutationObserver(() => {
-  // Using requestAnimationFrame so the DOM can settle
   requestAnimationFrame(initializeOverlay);
 });
 navigationObserver.observe(document.body, { childList: true, subtree: true });
